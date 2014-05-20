@@ -66,7 +66,7 @@ def js_string_extractor(path):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("paths", metavar="Path", nargs="+",
+    parser.add_argument("paths", metavar="PATH", nargs="+",
             help="Source files and directories")
     parser.add_argument("-o", "--output",
             default="l10n/",

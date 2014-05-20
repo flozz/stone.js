@@ -46,10 +46,10 @@ if [ "$1" == extract ] ; then
     shift
     $PYTHON tools/extract.py "$@"
     exit $?
-#elif [ "$1" == build ] ; then
-    #shift
-    #$PYTHON tools/build.py "$@"
-    #exit $?
+elif [ "$1" == build ] ; then
+    shift
+    $PYTHON tools/build.py "$@"
+    exit $?
 #elif [ "$1" == merge ] ; then
     #shift
     #$PYTHON tools/merge.py "$@"
@@ -61,7 +61,7 @@ else
     echo -e "    ./stone.sh <command> --help"
     echo -e "\nCOMMANDS:"
     echo -e "    extract -- Extract strings from js files and update locales (.po)"
-    #echo -e "    build   -- Build locales (.po -> .json)"
+    echo -e "    build   -- Build locales (.po -> .json)"
     #echo -e "    merge   -- Merge all JSONs into one JSON file containing all translations"
     #echo -e "               for all languages"
     exit 1

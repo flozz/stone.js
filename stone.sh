@@ -31,7 +31,7 @@ $PYTHON <<< "import jslex" > /dev/null 2> /dev/null || {
     exit 1
 }
 
-$PYTHON <<< "import jslex" > /dev/null 2> /dev/null || {
+$PYTHON <<< "import polib" > /dev/null 2> /dev/null || {
     echo -e "\e[1;31mE: Unable to find the polib Python module\e[0m\n"
     echo -e "You can install it with the following command:\n"
     echo -e "    pip install polib"
@@ -50,10 +50,10 @@ elif [ "$1" == build ] ; then
     shift
     $PYTHON tools/build.py "$@"
     exit $?
-#elif [ "$1" == merge ] ; then
-    #shift
-    #$PYTHON tools/merge.py "$@"
-    #exit $?
+elif [ "$1" == merge ] ; then
+    shift
+    $PYTHON tools/merge.py "$@"
+    exit $?
 else
     echo -e "STONE.JS TOOLS"
     echo -e "\nUSAGE:"
@@ -62,7 +62,7 @@ else
     echo -e "\nCOMMANDS:"
     echo -e "    extract -- Extract strings from js files and update locales (.po)"
     echo -e "    build   -- Build locales (.po -> .json)"
-    #echo -e "    merge   -- Merge all JSONs into one JSON file containing all translations"
-    #echo -e "               for all languages"
+    echo -e "    merge   -- Merge all JSONs into one JSON file containing all translations"
+    echo -e "               for all languages"
     exit 1
 fi

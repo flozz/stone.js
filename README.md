@@ -1,4 +1,4 @@
-# Stone.js -- Javascript Internationalization Library
+# Stone.js: Javascript i18n Library
 
 
 

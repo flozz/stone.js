@@ -68,7 +68,8 @@ var Stone = (function(window, undefined) {
 
     function setLocale(l) {
         locale = l;
-        // TODO Send event
+        var ev = new Event("stonejs-locale-changed");
+        document.dispatchEvent(ev);
     }
 
     return {

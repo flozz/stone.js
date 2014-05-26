@@ -27,7 +27,7 @@
  */
 
 
-window.Stone = (function(window, undefined) {
+var Stone = (function(window, undefined) {
 
     var catalogs = {};
     var locale = null;
@@ -68,7 +68,15 @@ window.Stone = (function(window, undefined) {
 
     function setLocale(l) {
         locale = l;
-        var ev = new Event("stonejs-locale-changed");
+        var ev = null;
+        try {
+            ev = new Event("stonejs-locale-changed");
+        }
+        catch (e) {
+            // The old-fashioned way... THANK YOU MSIE!
+            ev = document.createEvent("Event");
+            ev.initEvent("stonejs-locale-changed", true, false);
+        }
         document.dispatchEvent(ev);
     }
 

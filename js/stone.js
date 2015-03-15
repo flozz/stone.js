@@ -26,8 +26,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-var Stone = (function(window, undefined) {
+ (function (root, factory) {
+   // Assign to module.exports if the environment supports CommonJS.
+   // If root.Stone is already defined/truthy, use a Browser version nonetheless.
+   // ^ Useful for nw.js or atom-shell where you might want to still use the global version.
+   if(typeof module === "object" && module.exports && !root.Stone) {
+     module.exports = factory();
+   
+   // Otherwise use a global variable.
+   } else {
+     root.Stone = factory();
+   }
+ 
+ }(this, function() {
 
     var catalogs = {};
     var locale = null;
@@ -109,5 +120,4 @@ var Stone = (function(window, undefined) {
         setLocale: setLocale,
         guessUserLanguage: guessUserLanguage
     }
-
-})(window);
+}));

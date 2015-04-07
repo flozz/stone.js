@@ -13,6 +13,29 @@ import argparse
 
 CATALOGS = {}
 
+JS_TEMPLATE = """(function(window, undefined) {
+    function _sendEvent(name, data) {
+        var data = data || {};
+        var ev = null;
+        try {
+            ev = new Event(name);
+        }
+        catch (e) {
+            // The old-fashioned way... THANK YOU MSIE!
+            ev = document.createEvent("Event");
+            ev.initEvent(name, true, false);
+        }
+        for (var i in data) {
+            ev[i] = data[i];
+        }
+        document.dispatchEvent(ev);
+    }
+
+    var catalog = %s;
+
+    _sendEvent("stonejs-autoload-catalogs", {catalog: catalog});
+}(window));"""
+
 
 def ls_file(path, ext="js"):
     for root, folders, files in os.walk(path):
@@ -54,5 +77,5 @@ if __name__ == "__main__":
     result = json.dumps(CATALOGS, sort_keys=True, indent=4, ensure_ascii=False,
                 encoding="utf-8").encode("utf-8")
     if args.format == "js":
-        result = "Stone.addCatalogs(" + result + ");"
+        result = JS_TEMPLATE % result
     open(OUTPUT, "w").write(result)

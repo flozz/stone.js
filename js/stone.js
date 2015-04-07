@@ -26,19 +26,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
- (function (root, factory) {
-   // Assign to module.exports if the environment supports CommonJS.
-   // If root.Stone is already defined/truthy, use a Browser version nonetheless.
-   // ^ Useful for nw.js or atom-shell where you might want to still use the global version.
-   if(typeof module === "object" && module.exports && !root.Stone) {
-     module.exports = factory();
-   
-   // Otherwise use a global variable.
-   } else {
-     root.Stone = factory();
-   }
- 
- }(this, function() {
+(function (root, factory) {
+    // Assign to module.exports if the environment supports CommonJS.
+    // If root.Stone is already defined/truthy, use a Browser version nonetheless.
+    // ^ Useful for nw.js or atom-shell where you might want to still use the global version.
+    if (typeof module === "object" && module.exports && !root.Stone) {
+        module.exports = factory();
+    }
+    // Otherwise use a global variable.
+    else {
+        root.Stone = factory();
+    }
+
+} (this, function() {
 
     var catalogs = {};
     var locale = null;
@@ -79,16 +79,7 @@
 
     function setLocale(l) {
         locale = l;
-        var ev = null;
-        try {
-            ev = new Event("stonejs-locale-changed");
-        }
-        catch (e) {
-            // The old-fashioned way... THANK YOU MSIE!
-            ev = document.createEvent("Event");
-            ev.initEvent("stonejs-locale-changed", true, false);
-        }
-        document.dispatchEvent(ev);
+        _sendEvent("stonejs-locale-changed");
     }
 
     function guessUserLanguage() {
@@ -110,6 +101,29 @@
 
         return lang || "en";
     }
+
+    function _sendEvent(name, data) {
+        var data = data || {};
+        var ev = null;
+        try {
+            ev = new Event(name);
+        }
+        catch (e) {
+            // The old-fashioned way... THANK YOU MSIE!
+            ev = document.createEvent("Event");
+            ev.initEvent(name, true, false);
+        }
+        for (var i in data) {
+            ev[i] = data[i];
+        }
+        document.dispatchEvent(ev);
+    }
+
+    function _autoloadCatalogs(event) {
+        addCatalogs(event.catalog);
+    }
+
+    document.addEventListener("stonejs-autoload-catalogs", _autoloadCatalogs, true);
 
     return {
         LazyString: LazyString,

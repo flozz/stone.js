@@ -14,6 +14,24 @@ CATALOGS = {
 };
 
 
+function _sendEvent(name, data) {
+    var data = data || {};
+    var ev = null;
+    try {
+        ev = new Event(name);
+    }
+    catch (e) {
+        // The old-fashioned way... THANK YOU MSIE!
+        ev = document.createEvent("Event");
+        ev.initEvent(name, true, false);
+    }
+    for (var i in data) {
+        ev[i] = data[i];
+    }
+    document.dispatchEvent(ev);
+}
+
+
 describe("Stone JS API", function() {
 
     beforeEach(function() {
@@ -65,6 +83,31 @@ describe("Stone JS API", function() {
         expect(s+"").toEqual("Hello John");
         Stone.setLocale("fr");
         expect(s+"").toEqual("Bonjour John");
+    });
+
+    it("send an event when locale is changed", function(done) {
+        function _onStonejsLocaleChanged(event) {
+            expect(Stone.getLocale()).toEqual("testlang");
+            document.removeEventListener("stonejs-locale-changed", _onStonejsLocaleChanged, true);
+            done();
+        }
+
+        document.addEventListener("stonejs-locale-changed", _onStonejsLocaleChanged, true);
+        Stone.setLocale("testlang");
+    });
+
+    it("can loads catalogs automatically", function(done) {
+        _sendEvent("stonejs-autoload-catalogs", {"catalog": {"foolang": {"Hello World": "Foo bar"}}});
+
+        function _onStonejsLocaleChanged(event) {
+            expect(Stone.getLocale()).toEqual("foolang");
+            expect(Stone.gettext("Hello World")).toEqual("Foo bar");
+            document.removeEventListener("stonejs-locale-changed", _onStonejsLocaleChanged, true);
+            done();
+        }
+
+        document.addEventListener("stonejs-locale-changed", _onStonejsLocaleChanged, true);
+        Stone.setLocale("foolang");
     });
 
 });

@@ -16,6 +16,16 @@
     </head>
 
     <body>
+        Translatable DOM:
+        <ul>
+            <li stonejs id="translatable-1">Hello World</li>
+            <li stonejs stonejs-param-name="John" id="translatable-2">Hello {name}</li>
+        </ul>
+        Not Translatable DOM:
+        <ul>
+            <li id="not-translatable-1">Hello World</li>
+            <li id="not-translatable-2">Hello {name}</li>
+        </ul>
         <script type="text/javascript" src="StoneSpec.js"></script>
     </body>
 

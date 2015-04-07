@@ -42,6 +42,7 @@
 
     var catalogs = {};
     var locale = null;
+    var domScan = false;
 
     function LazyString(string, replacements) {
         this.toString = gettext.bind(this, string, replacements);
@@ -79,6 +80,9 @@
 
     function setLocale(l) {
         locale = l;
+        if (domScan) {
+            updateDomTranslation();
+        }
         _sendEvent("stonejs-locale-changed");
     }
 
@@ -125,6 +129,39 @@
 
     document.addEventListener("stonejs-autoload-catalogs", _autoloadCatalogs, true);
 
+    function enableDomScan(enable) {
+        domScan = !!enable;
+        if (domScan) {
+            updateDomTranslation();
+        }
+    }
+
+    function updateDomTranslation() {
+        var elements = document.getElementsByTagName("*");
+        var params = null;
+        var attrs = null;
+        var i = 0;
+        var j = 0;
+        for (i=0 ; i<elements.length ; i++) {
+            if (elements[i].hasAttribute("stonejs")) {
+                // First pass
+                if (!elements[i].hasAttribute("stonejs-orig-string")) {
+                    elements[i].setAttribute("stonejs-orig-string", elements[i].innerHTML);
+                }
+
+                params = {};
+                attrs = elements[i].attributes;
+                for (j=0 ; j<attrs.length ; j++) {
+                    if (attrs[j].name.indexOf("stonejs-param-") == 0) {
+                        params[attrs[j].name.substr(14)] = attrs[j].value;
+                    }
+                }
+
+                elements[i].innerHTML = gettext(elements[i].getAttribute("stonejs-orig-string"), params);
+            }
+        }
+    }
+
     return {
         LazyString: LazyString,
         gettext: gettext,
@@ -132,6 +169,8 @@
         addCatalogs: addCatalogs,
         getLocale: getLocale,
         setLocale: setLocale,
-        guessUserLanguage: guessUserLanguage
+        guessUserLanguage: guessUserLanguage,
+        enableDomScan: enableDomScan,
+        updateDomTranslation: updateDomTranslation
     }
 }));

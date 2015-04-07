@@ -86,17 +86,15 @@ If you merged the files into a single Javascript, you can modify the script we s
 Stone.js can also translate strings stored in the DOM.
 
 
-## 1. Mark all translatable parts
+### 1. Mark all translatable parts
 
 ```html
 <span stonejs>Hello World</span>
 ```
 
-## 2. Allow Stone.js to scan the DOM
+### 2. Allow Stone.js to scan the DOM
 ```javascript
 Stone.enableDomScan(true);
 ```
 
 That's all
-
-**WARNING:** The strings stored in HTML documents are not yet extracted automatically by Stone.js tools.

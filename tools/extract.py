@@ -15,6 +15,11 @@ import argparse
 import jslex
 import polib
 
+try:
+    from BeautifulSoup import BeautifulSoup
+except Exception:
+    from bs4 import BeautifulSoup  # Old version
+
 
 STRINGS = {}
 FUNCTIONS = []
@@ -64,6 +69,15 @@ def js_string_extractor(path):
                     fname = False
                     infn = False
 
+def dom_string_extractor(path):
+    html = BeautifulSoup(open(path, "r").read().decode("utf-8"))
+    tags = html.body.findAll(lambda tag: dict(tag.attrs).has_key("stonejs"))
+    for tag in tags:
+        string = "".join([str(t) for t in tag.contents])
+        if not string in STRINGS:
+            STRINGS[string] = []
+        STRINGS[string].append([path, 0])
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
@@ -87,12 +101,19 @@ if __name__ == "__main__":
     print("\nExtracting strings...")
     for path in args.paths:
         if os.path.isfile(path):
-            print("  * %s" % path)
-            js_string_extractor(path)
+            if path.endswith(".js"):
+                print("  * %s (javascript)" % path)
+                js_string_extractor(path)
+            else:
+                print("  * %s (html)" % path)
+                dom_string_extractor(path)
         elif os.path.isdir(path):
             for file_ in ls_file(path, "js"):
-                print("  * %s" % file_)
+                print("  * %s (javascript)" % file_)
                 js_string_extractor(file_)
+            for file_ in ls_file(path, "html"):
+                print("  * %s (html)" % file_)
+                dom_string_extractor(file_)
         else:
             print("E: No such file or directory '%s'" % path)
             sys.exit(1)

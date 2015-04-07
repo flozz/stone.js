@@ -39,6 +39,14 @@ $PYTHON <<< "import polib" > /dev/null 2> /dev/null || {
     exit 1
 }
 
+$PYTHON <<< "import BeautifulSoup" > /dev/null 2> /dev/null || {
+    echo -e "\e[1;31mE: Unable to find the beautifulsoup Python module\e[0m\n"
+    echo -e "You can install it with the following command:\n"
+    echo -e "    pip install beautifulsoup"
+    echo -e "    easy_install beautifulsoup    # Mac OS"
+    exit 1
+}
+
 
 # Check Params and run tools
 

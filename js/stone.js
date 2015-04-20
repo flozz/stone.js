@@ -157,7 +157,8 @@
                     }
                 }
 
-                elements[i].innerHTML = gettext(elements[i].getAttribute("stonejs-orig-string"), params);
+                __gettext = gettext;  // Avoid false detection
+                elements[i].innerHTML = __gettext(elements[i].getAttribute("stonejs-orig-string"), params);
             }
         }
     }

@@ -34,7 +34,7 @@ function _sendEvent(name, data) {
 
 describe("Stone JS API", function() {
 
-    beforeEach(function() {
+    beforeAll(function() {
         Stone.addCatalogs(CATALOGS);
     });
 
@@ -140,4 +140,41 @@ describe("Stone JS API", function() {
         expect(e_notTranslatable2.innerHTML).toEqual("Hello {name}");
     });
 
+});
+
+
+describe("Stone JS LazyString", function() {
+
+    beforeAll(function() {
+        Stone.addCatalogs(CATALOGS);
+        Stone.setLocale("fr");
+    });
+
+    beforeEach(function() {
+        this.lazy = new Stone.LazyString("Hello World");
+    });
+
+    it("can translate text", function() {
+        expect(this.lazy.toString()).toEqual("Bonjour le monde");
+    });
+
+    it("can mimic the String API", function() {
+        var stringProps = Object.getOwnPropertyNames(String.prototype);
+        var lazyProps = Object.getOwnPropertyNames(this.lazy);
+        for (var i=0 ; i<stringProps.length ; i++) {
+            expect(lazyProps).toContain(stringProps[i]);
+        }
+    });
+
+    it("can give the translated string length", function() {
+        expect(this.lazy.length).toEqual(16);
+    });
+
+    it("can return the translated string in lowerCase", function() {
+        expect(this.lazy.toLowerCase()).toEqual("bonjour le monde");
+    });
+
+    it("can return a splitted translated string", function() {
+        expect(this.lazy.split(" ")).toEqual(["Bonjour", "le", "monde"]);
+    });
 });

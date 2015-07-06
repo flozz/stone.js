@@ -1,0 +1,5 @@
+dist
+tools
+node_modules
+__env__
+l10n

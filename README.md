@@ -8,7 +8,7 @@
 First import the library, add catalogs and create an alias for the gettext function:
 
 ```html
-<script src="js/lib/stone.js"></script>
+<script src="dist/stonejs.js"></script>
 <script>
     // Alias the gettext function
     window._ = Stone.gettext;

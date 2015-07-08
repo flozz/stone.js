@@ -23,6 +23,15 @@ module.exports = function(grunt) {
                     'dist/<%= pkg.name %>.min.js': ['dist/<%= pkg.name %>.js']
                 }
             }
+        },
+
+        jasmine: {
+            pivotal: {
+                src: 'dist/stonejs.js',
+                options: {
+                    specs: 'test/*Spec.js'
+                }
+            }
         }
 
     });
@@ -30,8 +39,10 @@ module.exports = function(grunt) {
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-jasmine');
 
     // Default task(s).
     grunt.registerTask('default', ['browserify', 'uglify']);
+    grunt.registerTask('test', ['jasmine']);
 
 };

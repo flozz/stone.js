@@ -32,10 +32,27 @@ function _sendEvent(name, data) {
 }
 
 
+function _addHtml() {
+    var _html = "<br />Translatable DOM:";
+    _html += "<ul>";
+    _html += "    <li stonejs id=\"translatable-1\">Hello World</li>";
+    _html += "    <li stonejs stonejs-param-name=\"John\" id=\"translatable-2\">Hello {name}</li>";
+    _html += "</ul>";
+    _html += "Not Translatable DOM:";
+    _html += "<ul>";
+    _html += "    <li id=\"not-translatable-1\">Hello World</li>";
+    _html += "    <li id=\"not-translatable-2\">Hello {name}</li>";
+    _html += "</ul>";
+
+    document.getElementsByTagName("body")[0].innerHTML += _html;
+}
+
+
 describe("Stone JS API", function() {
 
     beforeAll(function() {
         Stone.addCatalogs(CATALOGS);
+        _addHtml();
     });
 
     it("can switches the locale", function() {

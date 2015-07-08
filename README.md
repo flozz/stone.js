@@ -1,5 +1,9 @@
 # Stone.js: Javascript i18n Library
 
+[ ![Build Status](https://api.travis-ci.org/flozz/stone.js.svg?branch=master) ](https://travis-ci.org/flozz/stone.js)
+[ ![NPM Version](http://img.shields.io/npm/v/stonejs.svg?style=flat) ](https://www.npmjs.com/package/stonejs)
+[ ![License](http://img.shields.io/npm/l/stonejs.svg?style=flat) ](https://www.npmjs.com/package/stonejs)
+
 
 ## Quick Start
 

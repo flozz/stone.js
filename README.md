@@ -7,13 +7,12 @@
 
 Stone.js is a gettext-like Javascript internationalization library that provides many useful functionalities like:
 
-* immediate translation (gettext)
+* immediate translation with (gettext)
 * differed translation using lazy strings (lazyGettext)
 * Javascript **and** HTML internationalization
+* replacement support inside translated strings
 * ~~plural forms support (ngettext/nLazyGettext)~~ *soon*
-* tools to extract/update/build translatable string (see [stonejs-tools][])
-
-[stonejs-tools]: https://github.com/flozz/stonejs-tools
+* tools to extract/update/build translatable strings (see [stonejs-tools][])
 
 
 ## Getting Started
@@ -46,6 +45,8 @@ TODO
 
 #### Loading Catalogs / Enable Translation of your application
 
+TODO js vs json format
+
 TODO
 
 
@@ -54,52 +55,145 @@ TODO
 
 ### Stone.gettext
 
-TODO
+Translates the given string to the current language.
+
+    String: Stone.gettext( <string> [, replacements] );
+
+**params:**
+
+* `string`: The string to translate.
+* `replacements`: an object containing replacements for the string (optional, see example below).
+
+**returns:**
+
+The translated string.
+
+**Examples:**
+
+    var text1 = Stone.gettext("Hello World");
+    var text2 = Stone.gettext("Hello {name}", {name: "John"});
 
 
 ### Stone.lazyGettext
 
-TODO
+Same as `Stone.gettext` but returns a `Stone.LazyString` instead of a `String`.
+
+    String: Stone.lazyGettext( <string> [, replacements] );
 
 
 ### Stone.addCatalogs
 
-TODO
+Add one (or more if you merged multiple language into one file) string catalog.
+
+    Stone.addCatalogs( <catalogs> );
+
+**params:**
+
+* `catalogs`: An object containing translated strings (catalogs can be build using [stronejs-tools][]).
+
+**Examples:**
+
+    Stone.addCatalogs(catalogs);
 
 
 ### Stone.getLocale
 
-TODO
+Returns the current locale (aka target language for the `gettext` and `lazyGettext` functions). The default locale is "c" (it means no translation: simply returns the string as it is in the source).
+
+    String: Stone.getLocale();
+
+**Examples:**
+
+    var locale = Stone.getLocale();
+    // "c", "en", "fr", ...
 
 
 ### Stone.setLocale
 
-TODO
+Defines the current locale (aka the target language for the `gettext` and `lazyGettext` functions).
+
+    Stone.setLocale( <locale> );
+
+**params:**
+
+* `locale`: The locale code (e.g. `en`, `fr`, ...)
+
+**Examples:**
+
+    Stone.setLocale("fr");
 
 
 ### Stone.guessUserLanguage
 
-TODO
+Try to guess the user language (based on the browser preferred languages).
+
+    String: Stone.guessUserLanguage();
+
+**returns:**
+
+The user's language.
+
+**example:**
+
+    var locale = Stone.guessUserLanguage();
 
 
 ### Stone.enableDomScan
 
-TODO
+Allows Stone.js to scan all the DOM to find translatable strings (and to translate them).
+
+    Stone.enableDomScan( <enable> );
+
+**params:**
+
+* `enable`: Enable the can of the DOM if `true`, disable it else.
+
+**example:**
+
+    Stone.enableDomScan(true);
 
 
 ### Stone.updateDomTranslation
 
-TODO
+Actualize the DOM translation if DOM scan enabled width `Stone.enableDomScan` (re-scan and re-translate all strings).
+
+    Stone.updateDomTranslation();
 
 
 ### Stone.LazyString (class)
 
-TODO
+`Stone.LazyString` is an object returned by the `Stone.lazyGettext` function. It behaves like a standard `String` object (same API) but its value changes if you change the locale with `Stone.setLocale` function.
+
+This is useful when you have to define translatable strings before the string catalog was loaded, or to re-translate automatically strings each time the locale is changed.
+
+You can find an example of its utilisation in the PhotonUI documentation:
+
+* http://wanadev.github.io/PhotonUI/doc/widgets/translation.html
 
 
 ### "stonejs-locale-changed" (event)
 
-TODO
+This event is fired each time the locale changes (using the `Stone.setLocale` function).
+
+
+## Example Catalogs (JSON)
+
+    {
+        "fr": {
+            "plural-forms": "nplurals=2; plural=(n > 1);",
+            "messages": {
+                "Hello World": ["Bonjour le monde"],
+                "Hello {name}": ["Bonjour {name}"]
+            }
+        },
+        "it": {
+            "plural-forms": "nplurals=2; plural=(n != 1);",
+            "messages": {
+                "Hello World": ["Buongiorno il mondo"],
+                "Hello {name}": ["Buongiorno {name}"]
+            }
+        }
+    }
 
 
 ## Changelog
@@ -108,3 +202,6 @@ TODO
     * new javascript tools to replace the old pythonic ones
     * new file format (incompatible with old version!) to be ready for plural (ngettext) support
 
+
+
+[stonejs-tools]: https://github.com/flozz/stonejs-tools

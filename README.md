@@ -146,10 +146,10 @@ The last step to display your application into plenty of languages is to load th
     Stone.setLocale("fr");          // Sets the locale to french
 
 
-    console.log(_("Hello World");
+    console.log(_("Hello World"));
     // Bonjour le monde
 
-    console.log(_("Hello {name}", {name: "John"});
+    console.log(_("Hello {name}", {name: "John"}));
     // Bonjour John
 
 

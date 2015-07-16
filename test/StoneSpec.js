@@ -1,15 +1,24 @@
 CATALOGS = {
     "en": {
-        "Hello World": "",
-        "Hello {name}": ""
+        "plural-forms": "nplurals=2; plural=(n != 1);",
+        "messages": {
+            "Hello World": [""],
+            "Hello {name}": [""]
+        }
     },
     "fr": {
-        "Hello World": "Bonjour le monde",
-        "Hello {name}": "Bonjour {name}"
+        "plural-forms": "nplurals=2; plural=(n > 1);",
+        "messages": {
+            "Hello World": ["Bonjour le monde"],
+            "Hello {name}": ["Bonjour {name}"]
+        }
     },
     "it": {
-        "Hello World": "Buongiorno il mondo",
-        "Hello {name}": "Buongiorno {name}"
+        "plural-forms": "nplurals=2; plural=(n != 1);",
+        "messages": {
+            "Hello World": ["Buongiorno il mondo"],
+            "Hello {name}": ["Buongiorno {name}"]
+        }
     }
 };
 
@@ -114,7 +123,7 @@ describe("Stone JS API", function() {
     });
 
     it("can loads catalogs automatically", function(done) {
-        _sendEvent("stonejs-autoload-catalogs", {"catalog": {"foolang": {"Hello World": "Foo bar"}}});
+        _sendEvent("stonejs-autoload-catalogs", {"catalog": {"foolang": {messages: {"Hello World": ["Foo bar"]}}}});
 
         function _onStonejsLocaleChanged(event) {
             expect(Stone.getLocale()).toEqual("foolang");

@@ -120,55 +120,55 @@ The last step to display your application into plenty of languages is to load th
 
 **Example:**
 
-```
+```html
 <script src="dist/stonejs.js"></script>
 <script>
-var catalogs = {
-    "fr": {
-        "plural-forms": "nplurals=2; plural=(n > 1);",
-        "messages": {
-            "Hello World": ["Bonjour le monde"],
-            "Hello {name}": ["Bonjour {name}"]
+    var catalogs = {
+        "fr": {
+            "plural-forms": "nplurals=2; plural=(n > 1);",
+            "messages": {
+                "Hello World": ["Bonjour le monde"],
+                "Hello {name}": ["Bonjour {name}"]
+            }
+        },
+        "it": {
+            "plural-forms": "nplurals=2; plural=(n != 1);",
+            "messages": {
+                "Hello World": ["Buongiorno il mondo"],
+                "Hello {name}": ["Buongiorno {name}"]
+            }
         }
-    },
-    "it": {
-        "plural-forms": "nplurals=2; plural=(n != 1);",
-        "messages": {
-            "Hello World": ["Buongiorno il mondo"],
-            "Hello {name}": ["Buongiorno {name}"]
-        }
-    }
-};
+    };
 
-window._ = Stone.gettext;       // Alias the Stone.gettext function
-Stone.addCatalogs("catalogs");  // Add catalogs (here it is hard coded for the need of the example
-Stone.enableDomScan(true);      // Allow Stone.js to scan the DOM to find translatable nodes
-Stone.setLocale("fr");          // Sets the locale to french
+    window._ = Stone.gettext;       // Alias the Stone.gettext function
+    Stone.addCatalogs("catalogs");  // Add catalogs (here it is hard coded for the need of the example
+    Stone.enableDomScan(true);      // Allow Stone.js to scan the DOM to find translatable nodes
+    Stone.setLocale("fr");          // Sets the locale to french
 
 
-console.log(_("Hello World");
-// Bonjour le monde
+    console.log(_("Hello World");
+    // Bonjour le monde
 
-console.log(_("Hello {name}", {name: "John"});
-// Bonjour John
+    console.log(_("Hello {name}", {name: "John"});
+    // Bonjour John
 
 
-var text = Stone.lazyGettext("Hello World");
+    var text = Stone.lazyGettext("Hello World");
 
-console.log(text.toString());
-// Bonjour le monde
+    console.log(text.toString());
+    // Bonjour le monde
 
-Stone.setLocale("it");
-console.log(text.toString());
-// Buongiorno il mondo
+    Stone.setLocale("it");
+    console.log(text.toString());
+    // Buongiorno il mondo
 
-Stone.setLocale("c");
-console.log(text.toString());
-// Hello World
+    Stone.setLocale("c");
+    console.log(text.toString());
+    // Hello World
 
-Stone.setLocale("foo");
-console.log(text.toString());
-// Hello World
+    Stone.setLocale("foo");
+    console.log(text.toString());
+    // Hello World
 
 </script>
 ```

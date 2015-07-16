@@ -338,7 +338,8 @@ This event is fired each time the locale changes (using the `Stone.setLocale` fu
 
 * **2.0.0**:
     * new javascript tools to replace the old pythonic ones
-    * new file format (incompatible with old version!) to be ready for plural forms (ngettext) support
+    * new file format (incompatible with the previous version!) to be ready for plural forms (ngettext) support
+    * new documentation
 
 
 

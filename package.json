@@ -1,7 +1,7 @@
 {
   "name": "stonejs",
   "version": "1.0.1",
-  "description": "Javascript Internationalization Library",
+  "description": "gettext-like client-side Javascript Internationalization Library",
   "main": "src/stone.js",
   "devDependencies": {
     "grunt": "^0.4.5",

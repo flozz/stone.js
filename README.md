@@ -101,7 +101,7 @@ Stone.enableDomScan(true);
 
 Once you have internationalized your application, you will have to:
 
-* Extract the translatable string from your js and html files,
+* Extract the translatable strings from your js and html files,
 
 * Translate the extracted strings,
 
@@ -112,7 +112,7 @@ For all those steps, you can use the Stone.js tools available here:
 * https://github.com/flozz/stonejs-tools
 
 
-#### Loading Catalogs / Enable Translation of your application
+#### Load Catalogs / Enable Translation of your application
 
 The last step to display your application into plenty of languages is to load the catalogs you built with [stonejs-tools][] and set the current locale.
 
@@ -209,13 +209,13 @@ Same as `Stone.gettext` but returns a `Stone.LazyString` instead of a `String`.
 
 ### Stone.addCatalogs
 
-Add one (or more if you merged multiple language into one file) string catalog.
+Adds one (or more if you merged multiple languages into one file) string catalog.
 
     Stone.addCatalogs( <catalogs> );
 
 **params:**
 
-* `catalogs`: An object containing translated strings (catalogs can be build using [stronejs-tools][]).
+* `catalogs`: An object containing translated strings (catalogs can be built using [stronejs-tools][]).
 
 **Examples:**
 
@@ -257,7 +257,7 @@ Stone.setLocale("fr");
 
 ### Stone.guessUserLanguage
 
-Try to guess the user language (based on the browser preferred languages).
+Tries to guess the user language (based on the browser's preferred languages).
 
     String: Stone.guessUserLanguage();
 
@@ -280,7 +280,7 @@ Allows Stone.js to scan all the DOM to find translatable strings (and to transla
 
 **params:**
 
-* `enable`: Enable the can of the DOM if `true`, disable it else.
+* `enable`: Enable the scan of the DOM if `true`, disable it otherwise.
 
 **example:**
 
@@ -291,7 +291,7 @@ Stone.enableDomScan(true);
 
 ### Stone.updateDomTranslation
 
-Actualize the DOM translation if DOM scan enabled width `Stone.enableDomScan` (re-scan and re-translate all strings).
+Updates the DOM translation if DOM scan was enabled with `Stone.enableDomScan` (re-scan and re-translate all strings).
 
     Stone.updateDomTranslation();
 
@@ -300,9 +300,9 @@ Actualize the DOM translation if DOM scan enabled width `Stone.enableDomScan` (r
 
 `Stone.LazyString` is an object returned by the `Stone.lazyGettext` function. It behaves like a standard `String` object (same API) but its value changes if you change the locale with `Stone.setLocale` function.
 
-This is useful when you have to define translatable strings before the string catalog was loaded, or to re-translate automatically strings each time the locale is changed.
+This is useful when you have to define translatable strings before the string catalog was loaded, or to automatically re-translate strings each time the locale is changed.
 
-You can find an example of its utilisation in the PhotonUI documentation:
+You can find an example of its use in the PhotonUI documentation:
 
 * http://wanadev.github.io/PhotonUI/doc/widgets/translation.html
 

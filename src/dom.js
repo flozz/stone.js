@@ -41,7 +41,7 @@ function updateDomTranslation() {
     var attrs = null;
     var i = 0;
     var j = 0;
-    for (i=0 ; i<elements.length ; i++) {
+    for (i = 0 ; i < elements.length ; i++) {
         if (elements[i].hasAttribute("stonejs")) {
             // First pass
             if (!elements[i].hasAttribute("stonejs-orig-string")) {
@@ -50,7 +50,7 @@ function updateDomTranslation() {
 
             params = {};
             attrs = elements[i].attributes;
-            for (j=0 ; j<attrs.length ; j++) {
+            for (j = 0 ; j < attrs.length ; j++) {
                 if (attrs[j].name.indexOf("stonejs-param-") === 0) {
                     params[attrs[j].name.substr(14)] = attrs[j].value;
                 }
@@ -62,7 +62,7 @@ function updateDomTranslation() {
 }
 
 function enableDomScan(enable) {
-    domScan = !!enable;
+    domScan = Boolean(enable);
     updateDomTranslation();
 }
 

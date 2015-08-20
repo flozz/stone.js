@@ -1,35 +1,33 @@
 var CATALOGS = {
-    "en": {
+    en: {
         "plural-forms": "nplurals=2; plural=(n != 1);",
-        "messages": {
+        messages: {
             "Hello World": [""],
             "Hello {name}": [""]
         }
     },
-    "fr": {
+    fr: {
         "plural-forms": "nplurals=2; plural=(n > 1);",
-        "messages": {
+        messages: {
             "Hello World": ["Bonjour le monde"],
             "Hello {name}": ["Bonjour {name}"]
         }
     },
-    "it": {
+    it: {
         "plural-forms": "nplurals=2; plural=(n != 1);",
-        "messages": {
+        messages: {
             "Hello World": ["Buongiorno il mondo"],
             "Hello {name}": ["Buongiorno {name}"]
         }
     }
 };
 
-
 function _sendEvent(name, data) {
     data = data || {};
     var ev = null;
     try {
         ev = new Event(name);
-    }
-    catch (e) {
+    } catch (e) {
         // The old-fashioned way... THANK YOU MSIE!
         ev = document.createEvent("Event");
         ev.initEvent(name, true, false);
@@ -39,7 +37,6 @@ function _sendEvent(name, data) {
     }
     document.dispatchEvent(ev);
 }
-
 
 function _addHtml() {
     var _html = "<br />Translatable DOM:";
@@ -56,20 +53,19 @@ function _addHtml() {
     document.getElementsByTagName("body")[0].innerHTML += _html;
 }
 
+describe("Stone JS API", function () {
 
-describe("Stone JS API", function() {
-
-    beforeAll(function() {
+    beforeAll(function () {
         Stone.addCatalogs(CATALOGS);
         _addHtml();
     });
 
-    it("can switches the locale", function() {
+    it("can switches the locale", function () {
         Stone.setLocale("fr");
         expect(Stone.getLocale()).toEqual("fr");
     });
 
-    it("can translates strings", function() {
+    it("can translates strings", function () {
         Stone.setLocale(null);
         expect(Stone.gettext("Hello World")).toEqual("Hello World");
         Stone.setLocale("xx");
@@ -82,36 +78,36 @@ describe("Stone JS API", function() {
         expect(Stone.gettext("Hello World")).toEqual("Buongiorno il mondo");
     });
 
-    it("can lazy-translates strings", function() {
+    it("can lazy-translates strings", function () {
         var s = Stone.lazyGettext("Hello World");
         Stone.setLocale(null);
-        expect(s+"").toEqual("Hello World");
+        expect(String(s)).toEqual("Hello World");
         Stone.setLocale("fr");
-        expect(s+"").toEqual("Bonjour le monde");
+        expect(String(s)).toEqual("Bonjour le monde");
     });
 
-    it("can translates strings with replacements", function() {
+    it("can translates strings with replacements", function () {
         Stone.setLocale(null);
-        expect(Stone.gettext("Hello {name}", {"name": "John"})).toEqual("Hello John");
+        expect(Stone.gettext("Hello {name}", {name: "John"})).toEqual("Hello John");
         Stone.setLocale("xx");
-        expect(Stone.gettext("Hello {name}", {"name": "John"})).toEqual("Hello John");
+        expect(Stone.gettext("Hello {name}", {name: "John"})).toEqual("Hello John");
         Stone.setLocale("en");
-        expect(Stone.gettext("Hello {name}", {"name": "John"})).toEqual("Hello John");
+        expect(Stone.gettext("Hello {name}", {name: "John"})).toEqual("Hello John");
         Stone.setLocale("fr");
-        expect(Stone.gettext("Hello {name}", {"name": "John"})).toEqual("Bonjour John");
+        expect(Stone.gettext("Hello {name}", {name: "John"})).toEqual("Bonjour John");
         Stone.setLocale("it");
-        expect(Stone.gettext("Hello {name}", {"name": "John"})).toEqual("Buongiorno John");
+        expect(Stone.gettext("Hello {name}", {name: "John"})).toEqual("Buongiorno John");
     });
 
-    it("can lazy-translates strings with replacements", function() {
-        var s = Stone.lazyGettext("Hello {name}", {"name": "John"});
+    it("can lazy-translates strings with replacements", function () {
+        var s = Stone.lazyGettext("Hello {name}", {name: "John"});
         Stone.setLocale(null);
-        expect(s+"").toEqual("Hello John");
+        expect(String(s)).toEqual("Hello John");
         Stone.setLocale("fr");
-        expect(s+"").toEqual("Bonjour John");
+        expect(String(s)).toEqual("Bonjour John");
     });
 
-    it("send an event when locale is changed", function(done) {
+    it("send an event when locale is changed", function (done) {
         function _onStonejsLocaleChanged(event) {
             expect(Stone.getLocale()).toEqual("testlang");
             document.removeEventListener("stonejs-locale-changed", _onStonejsLocaleChanged, true);
@@ -122,8 +118,8 @@ describe("Stone JS API", function() {
         Stone.setLocale("testlang");
     });
 
-    it("can loads catalogs automatically", function(done) {
-        _sendEvent("stonejs-autoload-catalogs", {"catalog": {"foolang": {messages: {"Hello World": ["Foo bar"]}}}});
+    it("can loads catalogs automatically", function (done) {
+        _sendEvent("stonejs-autoload-catalogs", {catalog: {foolang: {messages: {"Hello World": ["Foo bar"]}}}});
 
         function _onStonejsLocaleChanged(event) {
             expect(Stone.getLocale()).toEqual("foolang");
@@ -136,7 +132,7 @@ describe("Stone JS API", function() {
         Stone.setLocale("foolang");
     });
 
-    it("can finds and translate DOM strings", function() {
+    it("can finds and translate DOM strings", function () {
         var e_translatable1 = document.getElementById("translatable-1");
         var e_notTranslatable1 = document.getElementById("not-translatable-1");
 
@@ -151,7 +147,7 @@ describe("Stone JS API", function() {
         expect(e_notTranslatable1.innerHTML).toEqual("Hello World");
     });
 
-    it("can finds and translate DOM strings with replacements", function() {
+    it("can finds and translate DOM strings with replacements", function () {
         var e_translatable2 = document.getElementById("translatable-2");
         var e_notTranslatable2 = document.getElementById("not-translatable-2");
 
@@ -168,39 +164,38 @@ describe("Stone JS API", function() {
 
 });
 
+describe("Stone JS LazyString", function () {
 
-describe("Stone JS LazyString", function() {
-
-    beforeAll(function() {
+    beforeAll(function () {
         Stone.addCatalogs(CATALOGS);
         Stone.setLocale("fr");
     });
 
-    beforeEach(function() {
+    beforeEach(function () {
         this.lazy = new Stone.LazyString("Hello World");
     });
 
-    it("can translate text", function() {
+    it("can translate text", function () {
         expect(this.lazy.toString()).toEqual("Bonjour le monde");
     });
 
-    it("can mimic the String API", function() {
+    it("can mimic the String API", function () {
         var stringProps = Object.getOwnPropertyNames(String.prototype);
         var lazyProps = Object.getOwnPropertyNames(this.lazy);
-        for (var i=0 ; i<stringProps.length ; i++) {
+        for (var i = 0 ; i < stringProps.length ; i++) {
             expect(lazyProps).toContain(stringProps[i]);
         }
     });
 
-    it("can give the translated string length", function() {
+    it("can give the translated string length", function () {
         expect(this.lazy.length).toEqual(16);
     });
 
-    it("can return the translated string in lowerCase", function() {
+    it("can return the translated string in lowerCase", function () {
         expect(this.lazy.toLowerCase()).toEqual("bonjour le monde");
     });
 
-    it("can return a splitted translated string", function() {
+    it("can return a splitted translated string", function () {
         expect(this.lazy.split(" ")).toEqual(["Bonjour", "le", "monde"]);
     });
 });

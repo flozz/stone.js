@@ -42,7 +42,7 @@ function updateDomTranslation() {
     var attrs = null;
     var i = 0;
     var j = 0;
-    for (i=0 ; i<elements.length ; i++) {
+    for (i = 0 ; i < elements.length ; i++) {
         if (elements[i].hasAttribute("stonejs")) {
             // First pass
             if (!elements[i].hasAttribute("stonejs-orig-string")) {
@@ -51,7 +51,7 @@ function updateDomTranslation() {
 
             params = {};
             attrs = elements[i].attributes;
-            for (j=0 ; j<attrs.length ; j++) {
+            for (j = 0 ; j < attrs.length ; j++) {
                 if (attrs[j].name.indexOf("stonejs-param-") === 0) {
                     params[attrs[j].name.substr(14)] = attrs[j].value;
                 }
@@ -63,7 +63,7 @@ function updateDomTranslation() {
 }
 
 function enableDomScan(enable) {
-    domScan = !!enable;
+    domScan = Boolean(enable);
     updateDomTranslation();
 }
 
@@ -129,19 +129,18 @@ function LazyString(string, replacements) {
     this.toString = gettext.bind(this, string, replacements);
 
     var props = Object.getOwnPropertyNames(String.prototype);
-    for (var i=0 ; i<props.length ; i++) {
+    for (var i = 0 ; i < props.length ; i++) {
         if (props[i] == "toString") {
             continue;
         }
         if (typeof(String.prototype[props[i]]) == "function") {
-            this[props[i]] = function() {
+            this[props[i]] = function () {
                 var translatedString = this.self.toString();
                 return translatedString[this.prop].apply(translatedString, arguments);
             }.bind({self: this, prop: props[i]});
-        }
-        else {
+        } else {
             Object.defineProperty(this, props[i], {
-                get: function() {
+                get: function () {
                     var translatedString = this.self.toString();
                     return translatedString[this.prop];
                 }.bind({self: this, prop: props[i]}),

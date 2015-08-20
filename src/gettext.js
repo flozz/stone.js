@@ -54,19 +54,18 @@ function LazyString(string, replacements) {
     this.toString = gettext.bind(this, string, replacements);
 
     var props = Object.getOwnPropertyNames(String.prototype);
-    for (var i=0 ; i<props.length ; i++) {
+    for (var i = 0 ; i < props.length ; i++) {
         if (props[i] == "toString") {
             continue;
         }
         if (typeof(String.prototype[props[i]]) == "function") {
-            this[props[i]] = function() {
+            this[props[i]] = function () {
                 var translatedString = this.self.toString();
                 return translatedString[this.prop].apply(translatedString, arguments);
             }.bind({self: this, prop: props[i]});
-        }
-        else {
+        } else {
             Object.defineProperty(this, props[i], {
-                get: function() {
+                get: function () {
                     var translatedString = this.self.toString();
                     return translatedString[this.prop];
                 }.bind({self: this, prop: props[i]}),

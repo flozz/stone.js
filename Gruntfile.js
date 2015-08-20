@@ -2,16 +2,16 @@ module.exports = function(grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
+        pkg: grunt.file.readJSON("package.json"),
 
         browserify: {
             dist: {
                 files: {
-                  'dist/<%= pkg.name %>.js': ['src/index.js'],
+                  "dist/<%= pkg.name %>.js": ["src/index.js"],
                 },
                 options: {
                     browserifyOptions: {
-                        'standalone': 'Stone'
+                        "standalone": "Stone"
                     }
                 }
             }
@@ -20,7 +20,7 @@ module.exports = function(grunt) {
         uglify: {
             dist: {
                 files: {
-                    'dist/<%= pkg.name %>.min.js': ['dist/<%= pkg.name %>.js']
+                    "dist/<%= pkg.name %>.min.js": ["dist/<%= pkg.name %>.js"]
                 }
             }
         },
@@ -59,11 +59,18 @@ module.exports = function(grunt) {
             }
         },
 
+        jscs: {
+            all: ["src/*.js", "test/*.js"],
+            options: {
+                config: ".jscsrc"
+            }
+        },
+
         jasmine: {
             pivotal: {
-                src: 'dist/stonejs.js',
+                src: "dist/stonejs.js",
                 options: {
-                    specs: 'test/*Spec.js'
+                    specs: "test/*Spec.js"
                 }
             }
         }
@@ -71,13 +78,14 @@ module.exports = function(grunt) {
     });
 
     // Load the plugin that provides the "uglify" task.
-    grunt.loadNpmTasks('grunt-browserify');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks("grunt-browserify");
+    grunt.loadNpmTasks("grunt-contrib-uglify");
+    grunt.loadNpmTasks("grunt-contrib-jasmine");
+    grunt.loadNpmTasks("grunt-contrib-jshint");
+    grunt.loadNpmTasks("grunt-jscs");
 
     // Default task(s).
-    grunt.registerTask('default', ['browserify', 'uglify']);
-    grunt.registerTask('test', ['jshint', 'jasmine']);
+    grunt.registerTask("default", ["browserify", "uglify"]);
+    grunt.registerTask("test", ["jshint", "jscs", "jasmine"]);
 
 };

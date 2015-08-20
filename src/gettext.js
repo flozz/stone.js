@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Fabien LOISON <http://flozz.fr>
+ * Copyright (c) 2014-2015, Fabien LOISON <http://flozz.fr>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,10 +26,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+"use strict";
+
+var helpers = require("./helpers.js");
 
 var catalogs = {};
 var locale = null;
-var domScan = false;
 
 function LazyString(string, replacements) {
     this.toString = gettext.bind(this, string, replacements);
@@ -89,87 +91,6 @@ function getLocale() {
 
 function setLocale(l) {
     locale = l;
-    if (domScan) {
-        updateDomTranslation();
-    }
-    _sendEvent("stonejs-locale-changed");
-}
-
-function guessUserLanguage() {
-    var lang = navigator.language || navigator.userLanguage || navigator.systemLanguage || navigator.browserLanguage || null;
-
-    if (lang) {
-        lang = lang.toLowerCase();
-    }
-
-    if (lang && lang.length > 3) {
-        lang = lang.split(";")[0];
-        lang = lang.split(",")[0];
-        lang = lang.split("-")[0];
-        lang = lang.split("_")[0];
-        if (lang.length > 3) {
-            lang = null;
-        }
-    }
-
-    return lang || "en";
-}
-
-function _sendEvent(name, data) {
-    var data = data || {};
-    var ev = null;
-    try {
-        ev = new Event(name);
-    }
-    catch (e) {
-        // The old-fashioned way... THANK YOU MSIE!
-        ev = document.createEvent("Event");
-        ev.initEvent(name, true, false);
-    }
-    for (var i in data) {
-        ev[i] = data[i];
-    }
-    document.dispatchEvent(ev);
-}
-
-function _autoloadCatalogs(event) {
-    addCatalogs(event.catalog);
-}
-
-document.addEventListener("stonejs-autoload-catalogs", _autoloadCatalogs, true);
-
-function enableDomScan(enable) {
-    domScan = !!enable;
-    if (domScan) {
-        updateDomTranslation();
-    }
-}
-
-function updateDomTranslation() {
-    var elements = document.getElementsByTagName("*");
-    var params = null;
-    var attrs = null;
-    var i = 0;
-    var j = 0;
-    for (i=0 ; i<elements.length ; i++) {
-        if (elements[i].hasAttribute("stonejs")) {
-            // First pass
-            if (!elements[i].hasAttribute("stonejs-orig-string")) {
-                elements[i].setAttribute("stonejs-orig-string", elements[i].innerHTML);
-            }
-
-            params = {};
-            attrs = elements[i].attributes;
-            for (j=0 ; j<attrs.length ; j++) {
-                if (attrs[j].name.indexOf("stonejs-param-") == 0) {
-                    params[attrs[j].name.substr(14)] = attrs[j].value;
-                }
-            }
-
-            __gettext = gettext;  // Avoid false detection
-            elements[i].innerHTML = __gettext(elements[i].getAttribute("stonejs-orig-string"), params);
-        }
-    }
 }
 
 module.exports = {
@@ -178,8 +99,5 @@ module.exports = {
     lazyGettext: lazyGettext,
     addCatalogs: addCatalogs,
     getLocale: getLocale,
-    setLocale: setLocale,
-    guessUserLanguage: guessUserLanguage,
-    enableDomScan: enableDomScan,
-    updateDomTranslation: updateDomTranslation
+    setLocale: setLocale
 };

@@ -2,7 +2,7 @@
   "name": "stonejs",
   "version": "2.0.0",
   "description": "gettext-like client-side Javascript Internationalization Library",
-  "main": "src/stone.js",
+  "main": "src/index.js",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-browserify": "^3.8.0",

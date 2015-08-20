@@ -25,6 +25,40 @@ module.exports = function(grunt) {
             }
         },
 
+        jshint: {
+            lib: {
+                files: {
+                    src: ["src/*.js"]
+                },
+                options: {
+                    browserify: true
+                }
+            },
+            tests: {
+                files: {
+                    src: ["test/*.js"]
+                },
+                options: {
+                    jasmine: true,
+                    globals: {
+                        Stone: false
+                    }
+                }
+            },
+            options: {
+                futurehostile: true,
+                freeze: true,
+                latedef: true,
+                noarg: true,
+                nocomma: true,
+                nonbsp: true,
+                nonew: true,
+                undef: true,
+                curly: true,
+                browser: true
+            }
+        },
+
         jasmine: {
             pivotal: {
                 src: 'dist/stonejs.js',
@@ -40,9 +74,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
     // Default task(s).
     grunt.registerTask('default', ['browserify', 'uglify']);
-    grunt.registerTask('test', ['jasmine']);
+    grunt.registerTask('test', ['jshint', 'jasmine']);
 
 };

@@ -29,7 +29,7 @@
 "use strict";
 
 function sendEvent(name, data) {
-    var data = data || {};
+    data = data || {};
     var ev = null;
     try {
         ev = new Event(name);

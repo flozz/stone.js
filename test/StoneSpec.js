@@ -1,4 +1,4 @@
-CATALOGS = {
+var CATALOGS = {
     "en": {
         "plural-forms": "nplurals=2; plural=(n != 1);",
         "messages": {
@@ -24,7 +24,7 @@ CATALOGS = {
 
 
 function _sendEvent(name, data) {
-    var data = data || {};
+    data = data || {};
     var ev = null;
     try {
         ev = new Event(name);

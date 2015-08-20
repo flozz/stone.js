@@ -32,11 +32,6 @@ var _gettext = require("./gettext.js").gettext;
 
 var domScan = false;
 
-function enableDomScan(enable) {
-    domScan = !!enable;
-    updateDomTranslation();
-}
-
 function updateDomTranslation() {
     if (!domScan) {
         return;
@@ -56,7 +51,7 @@ function updateDomTranslation() {
             params = {};
             attrs = elements[i].attributes;
             for (j=0 ; j<attrs.length ; j++) {
-                if (attrs[j].name.indexOf("stonejs-param-") == 0) {
+                if (attrs[j].name.indexOf("stonejs-param-") === 0) {
                     params[attrs[j].name.substr(14)] = attrs[j].value;
                 }
             }
@@ -64,6 +59,11 @@ function updateDomTranslation() {
             elements[i].innerHTML = _gettext(elements[i].getAttribute("stonejs-orig-string"), params);
         }
     }
+}
+
+function enableDomScan(enable) {
+    domScan = !!enable;
+    updateDomTranslation();
 }
 
 module.exports = {

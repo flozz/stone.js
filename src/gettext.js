@@ -33,31 +33,6 @@ var helpers = require("./helpers.js");
 var catalogs = {};
 var locale = null;
 
-function LazyString(string, replacements) {
-    this.toString = gettext.bind(this, string, replacements);
-
-    var props = Object.getOwnPropertyNames(String.prototype);
-    for (var i=0 ; i<props.length ; i++) {
-        if (props[i] == "toString") continue;
-        if (typeof(String.prototype[props[i]]) == "function") {
-            this[props[i]] = function() {
-                var translatedString = this.self.toString();
-                return translatedString[this.prop].apply(translatedString, arguments);
-            }.bind({self: this, prop: props[i]});
-        }
-        else {
-            Object.defineProperty(this, props[i], {
-                get: function() {
-                    var translatedString = this.self.toString();
-                    return translatedString[this.prop]
-                }.bind({self: this, prop: props[i]}),
-                enumerable: false,
-                configurable: false
-            });
-        }
-    }
-}
-
 function gettext(string, replacements) {
     var result = string;
 
@@ -73,6 +48,33 @@ function gettext(string, replacements) {
     }
 
     return result;
+}
+
+function LazyString(string, replacements) {
+    this.toString = gettext.bind(this, string, replacements);
+
+    var props = Object.getOwnPropertyNames(String.prototype);
+    for (var i=0 ; i<props.length ; i++) {
+        if (props[i] == "toString") {
+            continue;
+        }
+        if (typeof(String.prototype[props[i]]) == "function") {
+            this[props[i]] = function() {
+                var translatedString = this.self.toString();
+                return translatedString[this.prop].apply(translatedString, arguments);
+            }.bind({self: this, prop: props[i]});
+        }
+        else {
+            Object.defineProperty(this, props[i], {
+                get: function() {
+                    var translatedString = this.self.toString();
+                    return translatedString[this.prop];
+                }.bind({self: this, prop: props[i]}),
+                enumerable: false,
+                configurable: false
+            });
+        }
+    }
 }
 
 function lazyGettext(string, replacements) {

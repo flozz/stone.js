@@ -53,96 +53,96 @@ function _addHtml() {
     document.getElementsByTagName("body")[0].innerHTML += _html;
 }
 
-describe("Stone JS API", function () {
+describe("StoneTest.index JS API", function () {
 
     beforeAll(function () {
-        Stone.addCatalogs(CATALOGS);
+        StoneTest.index.addCatalogs(CATALOGS);
         _addHtml();
     });
 
     it("can switches the locale", function () {
-        Stone.setLocale("fr");
-        expect(Stone.getLocale()).toEqual("fr");
+        StoneTest.index.setLocale("fr");
+        expect(StoneTest.index.getLocale()).toEqual("fr");
     });
 
     it("can translates strings", function () {
-        Stone.setLocale(null);
-        expect(Stone.gettext("Hello World")).toEqual("Hello World");
-        Stone.setLocale("xx");
-        expect(Stone.gettext("Hello World")).toEqual("Hello World");
-        Stone.setLocale("en");
-        expect(Stone.gettext("Hello World")).toEqual("Hello World");
-        Stone.setLocale("fr");
-        expect(Stone.gettext("Hello World")).toEqual("Bonjour le monde");
-        Stone.setLocale("it");
-        expect(Stone.gettext("Hello World")).toEqual("Buongiorno il mondo");
+        StoneTest.index.setLocale(null);
+        expect(StoneTest.index.gettext("Hello World")).toEqual("Hello World");
+        StoneTest.index.setLocale("xx");
+        expect(StoneTest.index.gettext("Hello World")).toEqual("Hello World");
+        StoneTest.index.setLocale("en");
+        expect(StoneTest.index.gettext("Hello World")).toEqual("Hello World");
+        StoneTest.index.setLocale("fr");
+        expect(StoneTest.index.gettext("Hello World")).toEqual("Bonjour le monde");
+        StoneTest.index.setLocale("it");
+        expect(StoneTest.index.gettext("Hello World")).toEqual("Buongiorno il mondo");
     });
 
     it("can lazy-translates strings", function () {
-        var s = Stone.lazyGettext("Hello World");
-        Stone.setLocale(null);
+        var s = StoneTest.index.lazyGettext("Hello World");
+        StoneTest.index.setLocale(null);
         expect(String(s)).toEqual("Hello World");
-        Stone.setLocale("fr");
+        StoneTest.index.setLocale("fr");
         expect(String(s)).toEqual("Bonjour le monde");
     });
 
     it("can translates strings with replacements", function () {
-        Stone.setLocale(null);
-        expect(Stone.gettext("Hello {name}", {name: "John"})).toEqual("Hello John");
-        Stone.setLocale("xx");
-        expect(Stone.gettext("Hello {name}", {name: "John"})).toEqual("Hello John");
-        Stone.setLocale("en");
-        expect(Stone.gettext("Hello {name}", {name: "John"})).toEqual("Hello John");
-        Stone.setLocale("fr");
-        expect(Stone.gettext("Hello {name}", {name: "John"})).toEqual("Bonjour John");
-        Stone.setLocale("it");
-        expect(Stone.gettext("Hello {name}", {name: "John"})).toEqual("Buongiorno John");
+        StoneTest.index.setLocale(null);
+        expect(StoneTest.index.gettext("Hello {name}", {name: "John"})).toEqual("Hello John");
+        StoneTest.index.setLocale("xx");
+        expect(StoneTest.index.gettext("Hello {name}", {name: "John"})).toEqual("Hello John");
+        StoneTest.index.setLocale("en");
+        expect(StoneTest.index.gettext("Hello {name}", {name: "John"})).toEqual("Hello John");
+        StoneTest.index.setLocale("fr");
+        expect(StoneTest.index.gettext("Hello {name}", {name: "John"})).toEqual("Bonjour John");
+        StoneTest.index.setLocale("it");
+        expect(StoneTest.index.gettext("Hello {name}", {name: "John"})).toEqual("Buongiorno John");
     });
 
     it("can lazy-translates strings with replacements", function () {
-        var s = Stone.lazyGettext("Hello {name}", {name: "John"});
-        Stone.setLocale(null);
+        var s = StoneTest.index.lazyGettext("Hello {name}", {name: "John"});
+        StoneTest.index.setLocale(null);
         expect(String(s)).toEqual("Hello John");
-        Stone.setLocale("fr");
+        StoneTest.index.setLocale("fr");
         expect(String(s)).toEqual("Bonjour John");
     });
 
     it("send an event when locale is changed", function (done) {
         function _onStonejsLocaleChanged(event) {
-            expect(Stone.getLocale()).toEqual("testlang");
+            expect(StoneTest.index.getLocale()).toEqual("testlang");
             document.removeEventListener("stonejs-locale-changed", _onStonejsLocaleChanged, true);
             done();
         }
 
         document.addEventListener("stonejs-locale-changed", _onStonejsLocaleChanged, true);
-        Stone.setLocale("testlang");
+        StoneTest.index.setLocale("testlang");
     });
 
     it("can loads catalogs automatically", function (done) {
         _sendEvent("stonejs-autoload-catalogs", {catalog: {foolang: {messages: {"Hello World": ["Foo bar"]}}}});
 
         function _onStonejsLocaleChanged(event) {
-            expect(Stone.getLocale()).toEqual("foolang");
-            expect(Stone.gettext("Hello World")).toEqual("Foo bar");
+            expect(StoneTest.index.getLocale()).toEqual("foolang");
+            expect(StoneTest.index.gettext("Hello World")).toEqual("Foo bar");
             document.removeEventListener("stonejs-locale-changed", _onStonejsLocaleChanged, true);
             done();
         }
 
         document.addEventListener("stonejs-locale-changed", _onStonejsLocaleChanged, true);
-        Stone.setLocale("foolang");
+        StoneTest.index.setLocale("foolang");
     });
 
     it("can finds and translate DOM strings", function () {
         var e_translatable1 = document.getElementById("translatable-1");
         var e_notTranslatable1 = document.getElementById("not-translatable-1");
 
-        Stone.enableDomScan(true);
+        StoneTest.index.enableDomScan(true);
 
-        Stone.setLocale(null);
+        StoneTest.index.setLocale(null);
         expect(e_translatable1.innerHTML).toEqual("Hello World");
         expect(e_notTranslatable1.innerHTML).toEqual("Hello World");
 
-        Stone.setLocale("fr");
+        StoneTest.index.setLocale("fr");
         expect(e_translatable1.innerHTML).toEqual("Bonjour le monde");
         expect(e_notTranslatable1.innerHTML).toEqual("Hello World");
     });
@@ -151,28 +151,28 @@ describe("Stone JS API", function () {
         var e_translatable2 = document.getElementById("translatable-2");
         var e_notTranslatable2 = document.getElementById("not-translatable-2");
 
-        Stone.enableDomScan(true);
+        StoneTest.index.enableDomScan(true);
 
-        Stone.setLocale(null);
+        StoneTest.index.setLocale(null);
         expect(e_translatable2.innerHTML).toEqual("Hello John");
         expect(e_notTranslatable2.innerHTML).toEqual("Hello {name}");
 
-        Stone.setLocale("fr");
+        StoneTest.index.setLocale("fr");
         expect(e_translatable2.innerHTML).toEqual("Bonjour John");
         expect(e_notTranslatable2.innerHTML).toEqual("Hello {name}");
     });
 
 });
 
-describe("Stone JS LazyString", function () {
+describe("StoneTest.index JS LazyString", function () {
 
     beforeAll(function () {
-        Stone.addCatalogs(CATALOGS);
-        Stone.setLocale("fr");
+        StoneTest.index.addCatalogs(CATALOGS);
+        StoneTest.index.setLocale("fr");
     });
 
     beforeEach(function () {
-        this.lazy = new Stone.LazyString("Hello World");
+        this.lazy = new StoneTest.index.LazyString("Hello World");
     });
 
     it("can translate text", function () {

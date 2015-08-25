@@ -52,7 +52,10 @@ module.exports = function(grunt) {
                 options: {
                     jasmine: true,
                     globals: {
-                        StoneTest: false
+                        StoneTest: false,
+                        CATALOGS: false,
+                        _sendEvent: false,
+                        _addHtml: false
                     }
                 }
             },
@@ -81,6 +84,7 @@ module.exports = function(grunt) {
             pivotal: {
                 src: "test/*.test.js",
                 options: {
+                    helpers: ["test/data.js", "test/helpers.js"],
                     specs: "test/*Spec.js"
                 }
             }

@@ -1,6 +1,6 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Stone = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*
- * Copyright (c) 2014, Fabien LOISON <http://flozz.fr>
+ * Copyright (c) 2014-2015, Fabien LOISON <http://flozz.fr>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,35 +27,86 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+"use strict";
 
-var catalogs = {};
-var locale = null;
+var _gettext = require("./gettext.js").gettext;
+
 var domScan = false;
 
-function LazyString(string, replacements) {
-    this.toString = gettext.bind(this, string, replacements);
+function updateDomTranslation() {
+    if (!domScan) {
+        return;
+    }
+    var elements = document.getElementsByTagName("*");
+    var params = null;
+    var attrs = null;
+    var i = 0;
+    var j = 0;
+    for (i = 0 ; i < elements.length ; i++) {
+        if (elements[i].hasAttribute("stonejs")) {
+            // First pass
+            if (!elements[i].hasAttribute("stonejs-orig-string")) {
+                elements[i].setAttribute("stonejs-orig-string", elements[i].innerHTML);
+            }
 
-    var props = Object.getOwnPropertyNames(String.prototype);
-    for (var i=0 ; i<props.length ; i++) {
-        if (props[i] == "toString") continue;
-        if (typeof(String.prototype[props[i]]) == "function") {
-            this[props[i]] = function() {
-                var translatedString = this.self.toString();
-                return translatedString[this.prop].apply(translatedString, arguments);
-            }.bind({self: this, prop: props[i]});
-        }
-        else {
-            Object.defineProperty(this, props[i], {
-                get: function() {
-                    var translatedString = this.self.toString();
-                    return translatedString[this.prop]
-                }.bind({self: this, prop: props[i]}),
-                enumerable: false,
-                configurable: false
-            });
+            params = {};
+            attrs = elements[i].attributes;
+            for (j = 0 ; j < attrs.length ; j++) {
+                if (attrs[j].name.indexOf("stonejs-param-") === 0) {
+                    params[attrs[j].name.substr(14)] = attrs[j].value;
+                }
+            }
+
+            elements[i].innerHTML = _gettext(elements[i].getAttribute("stonejs-orig-string"), params);
         }
     }
 }
+
+function enableDomScan(enable) {
+    domScan = Boolean(enable);
+    updateDomTranslation();
+}
+
+module.exports = {
+    enableDomScan: enableDomScan,
+    updateDomTranslation: updateDomTranslation
+};
+
+},{"./gettext.js":2}],2:[function(require,module,exports){
+/*
+ * Copyright (c) 2014-2015, Fabien LOISON <http://flozz.fr>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *   * Redistributions of source code must retain the above copyright notice, this
+ *     list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *   * Neither the name of the author nor the names of its contributors may be used
+ *     to endorse or promote products derived from this software without specific
+ *     prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+"use strict";
+
+var helpers = require("./helpers.js");
+
+var catalogs = {};
+var locale = null;
 
 function gettext(string, replacements) {
     var result = string;
@@ -74,6 +125,32 @@ function gettext(string, replacements) {
     return result;
 }
 
+function LazyString(string, replacements) {
+    this.toString = gettext.bind(this, string, replacements);
+
+    var props = Object.getOwnPropertyNames(String.prototype);
+    for (var i = 0 ; i < props.length ; i++) {
+        if (props[i] == "toString") {
+            continue;
+        }
+        if (typeof(String.prototype[props[i]]) == "function") {
+            this[props[i]] = function () {
+                var translatedString = this.self.toString();
+                return translatedString[this.prop].apply(translatedString, arguments);
+            }.bind({self: this, prop: props[i]});
+        } else {
+            Object.defineProperty(this, props[i], {
+                get: function () {
+                    var translatedString = this.self.toString();
+                    return translatedString[this.prop];
+                }.bind({self: this, prop: props[i]}),
+                enumerable: false,
+                configurable: false
+            });
+        }
+    }
+}
+
 function lazyGettext(string, replacements) {
     return new LazyString(string, replacements);
 }
@@ -90,39 +167,54 @@ function getLocale() {
 
 function setLocale(l) {
     locale = l;
-    if (domScan) {
-        updateDomTranslation();
-    }
-    _sendEvent("stonejs-locale-changed");
 }
 
-function guessUserLanguage() {
-    var lang = navigator.language || navigator.userLanguage || navigator.systemLanguage || navigator.browserLanguage || null;
+module.exports = {
+    LazyString: LazyString,
+    gettext: gettext,
+    lazyGettext: lazyGettext,
+    addCatalogs: addCatalogs,
+    getLocale: getLocale,
+    setLocale: setLocale
+};
 
-    if (lang) {
-        lang = lang.toLowerCase();
-    }
+},{"./helpers.js":3}],3:[function(require,module,exports){
+/*
+ * Copyright (c) 2014-2015, Fabien LOISON <http://flozz.fr>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *   * Redistributions of source code must retain the above copyright notice, this
+ *     list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *   * Neither the name of the author nor the names of its contributors may be used
+ *     to endorse or promote products derived from this software without specific
+ *     prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
-    if (lang && lang.length > 3) {
-        lang = lang.split(";")[0];
-        lang = lang.split(",")[0];
-        lang = lang.split("-")[0];
-        lang = lang.split("_")[0];
-        if (lang.length > 3) {
-            lang = null;
-        }
-    }
+"use strict";
 
-    return lang || "en";
-}
-
-function _sendEvent(name, data) {
-    var data = data || {};
+function sendEvent(name, data) {
+    data = data || {};
     var ev = null;
     try {
         ev = new Event(name);
-    }
-    catch (e) {
+    } catch (e) {
         // The old-fashioned way... THANK YOU MSIE!
         ev = document.createEvent("Event");
         ev.initEvent(name, true, false);
@@ -133,57 +225,92 @@ function _sendEvent(name, data) {
     document.dispatchEvent(ev);
 }
 
+function extractLanguage(languageString) {
+    if (languageString) {
+        languageString = languageString.toLowerCase();
+
+        if (languageString.length > 3) {
+            languageString = languageString.split(";")[0];
+            languageString = languageString.split(",")[0];
+            languageString = languageString.split("-")[0];
+            languageString = languageString.split("_")[0];
+            if (languageString.length > 3) {
+                languageString = null;
+            }
+        }
+    }
+
+    return languageString || "en";
+}
+
+module.exports = {
+    sendEvent: sendEvent,
+    extractLanguage: extractLanguage
+};
+
+},{}],4:[function(require,module,exports){
+/*
+ * Copyright (c) 2014-2015, Fabien LOISON <http://flozz.fr>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *   * Redistributions of source code must retain the above copyright notice, this
+ *     list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *   * Neither the name of the author nor the names of its contributors may be used
+ *     to endorse or promote products derived from this software without specific
+ *     prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+"use strict";
+
+var helpers = require("./helpers.js");
+var gettext = require("./gettext.js");
+var dom = require("./dom.js");
+
+function guessUserLanguage() {
+    var lang = navigator.language || navigator.userLanguage || navigator.systemLanguage || navigator.browserLanguage;
+    return helpers.extractLanguage(lang);
+}
+
+function setLocale(l) {
+    gettext.setLocale(l);
+    dom.updateDomTranslation();
+    helpers.sendEvent("stonejs-locale-changed");
+}
+
 function _autoloadCatalogs(event) {
-    addCatalogs(event.catalog);
+    gettext.addCatalogs(event.catalog);
 }
 
 document.addEventListener("stonejs-autoload-catalogs", _autoloadCatalogs, true);
 
-function enableDomScan(enable) {
-    domScan = !!enable;
-    if (domScan) {
-        updateDomTranslation();
-    }
-}
-
-function updateDomTranslation() {
-    var elements = document.getElementsByTagName("*");
-    var params = null;
-    var attrs = null;
-    var i = 0;
-    var j = 0;
-    for (i=0 ; i<elements.length ; i++) {
-        if (elements[i].hasAttribute("stonejs")) {
-            // First pass
-            if (!elements[i].hasAttribute("stonejs-orig-string")) {
-                elements[i].setAttribute("stonejs-orig-string", elements[i].innerHTML);
-            }
-
-            params = {};
-            attrs = elements[i].attributes;
-            for (j=0 ; j<attrs.length ; j++) {
-                if (attrs[j].name.indexOf("stonejs-param-") == 0) {
-                    params[attrs[j].name.substr(14)] = attrs[j].value;
-                }
-            }
-
-            __gettext = gettext;  // Avoid false detection
-            elements[i].innerHTML = __gettext(elements[i].getAttribute("stonejs-orig-string"), params);
-        }
-    }
-}
-
 module.exports = {
-    LazyString: LazyString,
-    gettext: gettext,
-    lazyGettext: lazyGettext,
-    addCatalogs: addCatalogs,
-    getLocale: getLocale,
+    LazyString: gettext.LazyString,
+    gettext: gettext.gettext,
+    lazyGettext: gettext.lazyGettext,
+    addCatalogs: gettext.addCatalogs,
+    getLocale: gettext.getLocale,
     setLocale: setLocale,
     guessUserLanguage: guessUserLanguage,
-    enableDomScan: enableDomScan,
-    updateDomTranslation: updateDomTranslation
+    enableDomScan: dom.enableDomScan,
+    updateDomTranslation: dom.updateDomTranslation
 };
 
-},{}]},{},[1])(1)
+},{"./dom.js":1,"./gettext.js":2,"./helpers.js":3}]},{},[4])(4)
 });

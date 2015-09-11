@@ -44,25 +44,78 @@ function sendEvent(name, data) {
     document.dispatchEvent(ev);
 }
 
-function extractLanguage(languageString) {
-    if (languageString) {
-        languageString = languageString.toLowerCase();
+function extractLanguages(languageString) {
+    if (!languageString) {
+        return ["en"];
+    }
 
-        if (languageString.length > 3) {
-            languageString = languageString.split(";")[0];
-            languageString = languageString.split(",")[0];
-            languageString = languageString.split("-")[0];
-            languageString = languageString.split("_")[0];
-            if (languageString.length > 3) {
-                languageString = null;
+    var langs = [];
+    var rawLangs = languageString.toLowerCase()
+                                 .replace(/-/g, "_")
+                                 .split(",");
+    var buff;
+
+    // extract lang
+    var lang;
+    for (var i = 0 ; i < rawLangs.length ; i++) {
+        lang = {lang: null, lect: null, q: 1};
+        if (rawLangs[i].indexOf(";") > -1) {
+            buff = rawLangs[i].split(";");
+            if (buff.length == 2 && buff[1].match(/^q=(1|0\.[0-9]+)$/)) {
+                lang.q = parseFloat(buff[1].split("=")[1]);
             }
+            buff = buff[0] || "";
+        } else {
+            buff = rawLangs[i];
+        }
+
+        if (buff.indexOf("_") > -1) {
+            buff = buff.split("_");
+            if (buff.length == 2) {
+                if (buff[0].length == 2) {
+                    lang.lang = buff[0];
+                    if (buff[1].length == 2) {
+                        lang.lect = buff[1];
+                    }
+                }
+            } else if (buff[0].length == 2) {
+                lang = buff[0];
+            }
+        } else if (buff.length == 2) {
+            lang.lang = buff;
+        }
+
+        if (lang.lang) {
+            langs.push(lang);
         }
     }
 
-    return languageString || "en";
+    // Empty list
+    if (langs.length === 0) {
+        return ["en"];
+    }
+
+    // Sort languages by priority
+    langs = langs.sort(function (a, b) {
+        return b.q - a.q;
+    });
+
+    // Generates final list
+    var result = [];
+
+    for (i = 0 ; i < langs.length ; i++) {
+        buff = langs[i].lang;
+        if (langs[i].lect) {
+            buff += "_";
+            buff += langs[i].lect.toUpperCase();
+        }
+        result.push(buff);
+    }
+
+    return result;
 }
 
 module.exports = {
     sendEvent: sendEvent,
-    extractLanguage: extractLanguage
+    extractLanguages: extractLanguages
 };

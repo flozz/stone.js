@@ -34,7 +34,7 @@ var dom = require("./dom.js");
 
 function guessUserLanguage() {
     var lang = navigator.language || navigator.userLanguage || navigator.systemLanguage || navigator.browserLanguage;
-    return helpers.extractLanguage(lang);
+    return helpers.extractLanguages(lang)[0];
 }
 
 function setLocale(l) {

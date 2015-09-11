@@ -1,21 +1,31 @@
 describe("helpers", function () {
 
-    describe("extractLanguage", function () {
+    describe("extractLanguages", function () {
 
         it("returns english by default", function () {
-            expect(StoneTest.helpers.extractLanguage()).toEqual("en");
-            expect(StoneTest.helpers.extractLanguage("")).toEqual("en");
-            expect(StoneTest.helpers.extractLanguage("foobarbaz")).toEqual("en");
+            expect(StoneTest.helpers.extractLanguages()).toEqual(["en"]);
+            expect(StoneTest.helpers.extractLanguages("")).toEqual(["en"]);
+            expect(StoneTest.helpers.extractLanguages("foobarbaz")).toEqual(["en"]);
         });
 
-        it("is able to extract the language from varous strings", function () {
-            expect(StoneTest.helpers.extractLanguage("fr")).toEqual("fr");
-            expect(StoneTest.helpers.extractLanguage("FR")).toEqual("fr");
-            expect(StoneTest.helpers.extractLanguage("fr_FR")).toEqual("fr");
-            expect(StoneTest.helpers.extractLanguage("fr-FR")).toEqual("fr");
-            expect(StoneTest.helpers.extractLanguage("fr-FR,en")).toEqual("fr");
-            expect(StoneTest.helpers.extractLanguage("fr-FR;en")).toEqual("fr");
-            expect(StoneTest.helpers.extractLanguage("fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3")).toEqual("fr");
+        it("is able to extract the languages from varous strings", function () {
+            expect(StoneTest.helpers.extractLanguages("fr")).toEqual(["fr"]);
+            expect(StoneTest.helpers.extractLanguages("FR")).toEqual(["fr"]);
+            expect(StoneTest.helpers.extractLanguages("fr_FR")).toEqual(["fr_FR"]);
+            expect(StoneTest.helpers.extractLanguages("fr-FR")).toEqual(["fr_FR"]);
+            expect(StoneTest.helpers.extractLanguages("fr-FR,en")).toEqual(["fr_FR", "en"]);
+            expect(StoneTest.helpers.extractLanguages("fr-FR;en")).toEqual(["fr_FR"]);
+            expect(StoneTest.helpers.extractLanguages("fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3"))
+                    .toEqual(["fr", "fr_FR", "en_US", "en"]);
+        });
+
+        it("sorts languages in the right order", function () {
+            expect(StoneTest.helpers.extractLanguages("fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3"))
+                    .toEqual(["fr", "fr_FR", "en_US", "en"]);
+            expect(StoneTest.helpers.extractLanguages("fr,fr-FR;q=0.8,en-US;q=0.5,en"))
+                    .toEqual(["fr", "en", "fr_FR", "en_US"]);
+            expect(StoneTest.helpers.extractLanguages("fr;q=0.9,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3,pt_BR;q=1"))
+                    .toEqual(["pt_BR", "fr", "fr_FR", "en_US", "en"]);
         });
 
     });

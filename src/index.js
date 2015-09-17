@@ -33,8 +33,7 @@ var gettext = require("./gettext.js");
 var dom = require("./dom.js");
 
 function guessUserLanguage() {
-    var lang = navigator.language || navigator.userLanguage || navigator.systemLanguage || navigator.browserLanguage;
-    return helpers.extractLanguages(lang)[0];
+    return helpers.extractLanguages()[0];
 }
 
 function setLocale(l) {
@@ -56,6 +55,7 @@ module.exports = {
     addCatalogs: gettext.addCatalogs,
     getLocale: gettext.getLocale,
     setLocale: setLocale,
+    setBestMatchingLocale: gettext.setBestMatchingLocale,
     guessUserLanguage: guessUserLanguage,
     enableDomScan: dom.enableDomScan,
     updateDomTranslation: dom.updateDomTranslation

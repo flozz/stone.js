@@ -45,7 +45,11 @@ function sendEvent(name, data) {
 }
 
 function extractLanguages(languageString) {
-    if (!languageString) {
+    if (languageString === undefined) {
+        languageString = navigator.language || navigator.userLanguage ||
+            navigator.systemLanguage || navigator.browserLanguage;
+    }
+    if (!languageString || languageString === "") {
         return ["en"];
     }
 

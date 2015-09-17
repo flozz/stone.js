@@ -3,7 +3,7 @@ describe("helpers", function () {
     describe("extractLanguages", function () {
 
         it("returns english by default", function () {
-            expect(StoneTest.helpers.extractLanguages()).toEqual(["en"]);
+            expect(StoneTest.helpers.extractLanguages(null)).toEqual(["en"]);
             expect(StoneTest.helpers.extractLanguages("")).toEqual(["en"]);
             expect(StoneTest.helpers.extractLanguages("foobarbaz")).toEqual(["en"]);
         });

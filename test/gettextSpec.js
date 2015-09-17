@@ -13,6 +13,81 @@ describe("gettext", function () {
 
     });
 
+    describe("setBestMatchingLocale", function () {
+
+        beforeAll(function () {
+            StoneTest.index.addCatalogs({
+                // en, fr, it +
+                fr_FR: {},
+                fr_ca: {},
+                "fr-be": {},
+                pt_BR: {},
+                es_ES: {},
+                es_AR: {},
+                de: {}
+            });
+        });
+
+        beforeEach(function () {
+            StoneTest.gettext.setLocale("c");
+        });
+
+        it("accepts a single string", function () {
+            StoneTest.gettext.setBestMatchingLocale("fr");
+            expect(StoneTest.index.getLocale()).toEqual("fr");
+        });
+
+        it("accepts an array of string", function () {
+            StoneTest.gettext.setBestMatchingLocale(["fr"]);
+            expect(StoneTest.index.getLocale()).toEqual("fr");
+        });
+
+        it("selects 'c' as locale if nothing matches", function () {
+            StoneTest.gettext.setBestMatchingLocale("foobarbaz");
+            expect(StoneTest.index.getLocale()).toEqual("c");
+        });
+
+        it("selects the right language with a perfect matching", function () {
+            StoneTest.gettext.setBestMatchingLocale("fr");
+            expect(StoneTest.index.getLocale()).toEqual("fr");
+
+            StoneTest.gettext.setBestMatchingLocale("FR");
+            expect(StoneTest.index.getLocale()).toEqual("fr");
+
+            StoneTest.gettext.setBestMatchingLocale("fr_FR");
+            expect(StoneTest.index.getLocale()).toEqual("fr_FR");
+
+            StoneTest.gettext.setBestMatchingLocale("fr_fr");
+            expect(StoneTest.index.getLocale()).toEqual("fr_FR");
+
+            StoneTest.gettext.setBestMatchingLocale("fr-fr");
+            expect(StoneTest.index.getLocale()).toEqual("fr_FR");
+
+            StoneTest.gettext.setBestMatchingLocale("fr-be");
+            expect(StoneTest.index.getLocale()).toEqual("fr-be");
+
+            StoneTest.gettext.setBestMatchingLocale("fr_BE");
+            expect(StoneTest.index.getLocale()).toEqual("fr-be");
+        });
+
+        it("selects the right language with a partial match (language provided but no lect)", function () {
+            StoneTest.gettext.setBestMatchingLocale("it");
+            expect(StoneTest.index.getLocale()).toEqual("it");
+
+            StoneTest.gettext.setBestMatchingLocale("es");
+            expect(StoneTest.index.getLocale()).toEqual("es_ES");
+
+            StoneTest.gettext.setBestMatchingLocale("pt");
+            expect(StoneTest.index.getLocale()).toEqual("pt_BR");
+        });
+
+        it("selects the right language with a partial match (language provided with lect)", function () {
+            StoneTest.gettext.setBestMatchingLocale("de_LU");
+            expect(StoneTest.index.getLocale()).toEqual("de");
+        });
+
+    });
+
     describe("gettext", function () {
 
         it("can translates strings", function () {

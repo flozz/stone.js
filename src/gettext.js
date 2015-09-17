@@ -36,7 +36,7 @@ var locale = null;
 function gettext(string, replacements) {
     var result = string;
 
-    if (locale && catalogs[locale] && catalogs[locale].messages[string] &&
+    if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string] &&
         catalogs[locale].messages[string].length > 0 && catalogs[locale].messages[string][0] !== "") {
         result = catalogs[locale].messages[string][0];
     }
@@ -94,11 +94,27 @@ function setLocale(l) {
     locale = l;
 }
 
+function setBestMatchingLocale(l) {
+    if (!l) {
+        l = helpers.extractLanguages();
+    }
+    if (!Array.isArray(l)) {
+        l = [l];
+    }
+    var availableCatalogs = Object.keys(catalogs);
+
+    for (var i = 0 ; i < availableCatalogs.length ; i++) {
+        // TODO fr -> fr, fr_fr, fr_* ; fr_fr -> fr_fr, fr, fr_* ; fr_ca -> fr_ca, fr, fr_fr, fr_*
+        var foo;
+    }
+}
+
 module.exports = {
     LazyString: LazyString,
     gettext: gettext,
     lazyGettext: lazyGettext,
     addCatalogs: addCatalogs,
     getLocale: getLocale,
-    setLocale: setLocale
+    setLocale: setLocale,
+    setBestMatchingLocale: setBestMatchingLocale
 };

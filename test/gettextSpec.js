@@ -84,6 +84,17 @@ describe("gettext", function () {
         it("selects the right language with a partial match (language provided with lect)", function () {
             StoneTest.gettext.setBestMatchingLocale("de_LU");
             expect(StoneTest.index.getLocale()).toEqual("de");
+
+            StoneTest.gettext.setBestMatchingLocale("pt_PT");
+            expect(StoneTest.index.getLocale()).toEqual("pr_BR");
+        });
+
+        it("selects the best matching language from a list", function () {
+            StoneTest.gettext.setBestMatchingLocale(["es", "es_AR", "fr_FR"]);
+            expect(StoneTest.index.getLocale()).toEqual("es_AR");
+
+            StoneTest.gettext.setBestMatchingLocale(["es", "fr_FR"]);
+            expect(StoneTest.index.getLocale()).toEqual("es_ES");
         });
 
     });

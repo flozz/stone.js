@@ -44,6 +44,43 @@ function sendEvent(name, data) {
     document.dispatchEvent(ev);
 }
 
+// fr -> {lang: "fr", lect: null, q: 1}
+// fr_FR, fr-fr -> {lang: "fr", lect: "fr", q: 1}
+// fr_FR;q=0.8, fr-fr;q=0.8 -> {lang: "fr", lect: "fr", q: 0.8}
+function parseLanguageCode(lang) {
+    lang = lang.toLowerCase().replace(/-/g, "_");
+    var result = {lang: null, lect: null, q: 1};
+    var buff = "";
+
+    if (lang.indexOf(";") > -1) {
+        buff = lang.split(";");
+        if (buff.length == 2 && buff[1].match(/^q=(1|0\.[0-9]+)$/)) {
+            result.q = parseFloat(buff[1].split("=")[1]);
+        }
+        buff = buff[0] || "";
+    } else {
+        buff = lang;
+    }
+
+    if (buff.indexOf("_") > -1) {
+        buff = buff.split("_");
+        if (buff.length == 2) {
+            if (buff[0].length == 2) {
+                result.lang = buff[0];
+                if (buff[1].length == 2) {
+                    result.lect = buff[1];
+                }
+            }
+        } else if (buff[0].length == 2) {
+            result = buff[0];
+        }
+    } else if (buff.length == 2) {
+        result.lang = buff;
+    }
+
+    return result;
+}
+
 function extractLanguages(languageString) {
     if (languageString === undefined) {
         languageString = navigator.language || navigator.userLanguage ||
@@ -54,41 +91,13 @@ function extractLanguages(languageString) {
     }
 
     var langs = [];
-    var rawLangs = languageString.toLowerCase()
-                                 .replace(/-/g, "_")
-                                 .split(",");
+    var rawLangs = languageString.split(",");
     var buff;
 
-    // extract lang
+    // extract langs
     var lang;
     for (var i = 0 ; i < rawLangs.length ; i++) {
-        lang = {lang: null, lect: null, q: 1};
-        if (rawLangs[i].indexOf(";") > -1) {
-            buff = rawLangs[i].split(";");
-            if (buff.length == 2 && buff[1].match(/^q=(1|0\.[0-9]+)$/)) {
-                lang.q = parseFloat(buff[1].split("=")[1]);
-            }
-            buff = buff[0] || "";
-        } else {
-            buff = rawLangs[i];
-        }
-
-        if (buff.indexOf("_") > -1) {
-            buff = buff.split("_");
-            if (buff.length == 2) {
-                if (buff[0].length == 2) {
-                    lang.lang = buff[0];
-                    if (buff[1].length == 2) {
-                        lang.lect = buff[1];
-                    }
-                }
-            } else if (buff[0].length == 2) {
-                lang = buff[0];
-            }
-        } else if (buff.length == 2) {
-            lang.lang = buff;
-        }
-
+        lang = parseLanguageCode(rawLangs[i]);
         if (lang.lang) {
             langs.push(lang);
         }
@@ -121,5 +130,6 @@ function extractLanguages(languageString) {
 
 module.exports = {
     sendEvent: sendEvent,
+    parseLanguageCode: parseLanguageCode,
     extractLanguages: extractLanguages
 };

@@ -86,7 +86,7 @@ describe("gettext", function () {
             expect(StoneTest.index.getLocale()).toEqual("de");
 
             StoneTest.gettext.setBestMatchingLocale("pt_PT");
-            expect(StoneTest.index.getLocale()).toEqual("pr_BR");
+            expect(StoneTest.index.getLocale()).toEqual("pt_BR");
         });
 
         it("selects the best matching language from a list", function () {
@@ -95,6 +95,19 @@ describe("gettext", function () {
 
             StoneTest.gettext.setBestMatchingLocale(["es", "fr_FR"]);
             expect(StoneTest.index.getLocale()).toEqual("es_ES");
+        });
+
+        it("selects the right catalogs with wrong locale names", function () {
+            StoneTest.gettext.setBestMatchingLocale(["foolang"]);
+            expect(StoneTest.index.getLocale()).toEqual("foolang");
+        });
+
+        it("selects the 'c' language if nothing matches", function () {
+            StoneTest.gettext.setBestMatchingLocale(["fr"]);
+            expect(StoneTest.index.getLocale()).toEqual("fr");
+
+            StoneTest.gettext.setBestMatchingLocale(["xxx"]);
+            expect(StoneTest.index.getLocale()).toEqual("c");
         });
 
     });

@@ -242,6 +242,8 @@ var locale = Stone.getLocale();
 
 Defines the current locale (aka the target language for the `gettext` and `lazyGettext` functions).
 
+**NOTE:** You can use the `setBestMatchingLocale` function to set the best language for the user.
+
     Stone.setLocale( <locale> );
 
 **params:**
@@ -254,6 +256,23 @@ Defines the current locale (aka the target language for the `gettext` and `lazyG
 Stone.setLocale("fr");
 ```
 
+### Stone.setBestMatchingLocale
+
+Find and set the best language for the user (depending on available catalogs and given language list).
+
+    Stone.setBestMatchingLocale( [locales] );
+
+**params:**
+
+* `locales`: (optional) string or array of string (e.g. `"fr"`, `["fr", "fr_FR", "en_US"]`).
+
+**Examples:**
+
+```javascript
+Stone.setBestMatchingLocale();  // Automaticaly set the best language (from informations given by the browser)
+setBestMatchingLocale("fr");    // Finds the catalog that best match "fr" ("fr", "fr_FR", fr_*,...)
+setBestMatchingLocale(["fr", "en_US", "en_UK"]);    // Finds the best available catalog from the given list
+```
 
 ### Stone.guessUserLanguage
 

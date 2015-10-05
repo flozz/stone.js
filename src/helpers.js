@@ -44,25 +44,92 @@ function sendEvent(name, data) {
     document.dispatchEvent(ev);
 }
 
-function extractLanguage(languageString) {
-    if (languageString) {
-        languageString = languageString.toLowerCase();
+// fr -> {lang: "fr", lect: null, q: 1}
+// fr_FR, fr-fr -> {lang: "fr", lect: "fr", q: 1}
+// fr_FR;q=0.8, fr-fr;q=0.8 -> {lang: "fr", lect: "fr", q: 0.8}
+function parseLanguageCode(lang) {
+    lang = lang.toLowerCase().replace(/-/g, "_");
+    var result = {lang: null, lect: null, q: 1};
+    var buff = "";
 
-        if (languageString.length > 3) {
-            languageString = languageString.split(";")[0];
-            languageString = languageString.split(",")[0];
-            languageString = languageString.split("-")[0];
-            languageString = languageString.split("_")[0];
-            if (languageString.length > 3) {
-                languageString = null;
+    if (lang.indexOf(";") > -1) {
+        buff = lang.split(";");
+        if (buff.length == 2 && buff[1].match(/^q=(1|0\.[0-9]+)$/)) {
+            result.q = parseFloat(buff[1].split("=")[1]);
+        }
+        buff = buff[0] || "";
+    } else {
+        buff = lang;
+    }
+
+    if (buff.indexOf("_") > -1) {
+        buff = buff.split("_");
+        if (buff.length == 2) {
+            if (buff[0].length == 2) {
+                result.lang = buff[0];
+                if (buff[1].length == 2) {
+                    result.lect = buff[1];
+                }
             }
+        } else if (buff[0].length == 2) {
+            result = buff[0];
+        }
+    } else if (buff.length == 2) {
+        result.lang = buff;
+    }
+
+    return result;
+}
+
+function extractLanguages(languageString) {
+    if (languageString === undefined) {
+        languageString = navigator.language || navigator.userLanguage ||
+            navigator.systemLanguage || navigator.browserLanguage;
+    }
+    if (!languageString || languageString === "") {
+        return ["en"];
+    }
+
+    var langs = [];
+    var rawLangs = languageString.split(",");
+    var buff;
+
+    // extract langs
+    var lang;
+    for (var i = 0 ; i < rawLangs.length ; i++) {
+        lang = parseLanguageCode(rawLangs[i]);
+        if (lang.lang) {
+            langs.push(lang);
         }
     }
 
-    return languageString || "en";
+    // Empty list
+    if (langs.length === 0) {
+        return ["en"];
+    }
+
+    // Sort languages by priority
+    langs = langs.sort(function (a, b) {
+        return b.q - a.q;
+    });
+
+    // Generates final list
+    var result = [];
+
+    for (i = 0 ; i < langs.length ; i++) {
+        buff = langs[i].lang;
+        if (langs[i].lect) {
+            buff += "_";
+            buff += langs[i].lect.toUpperCase();
+        }
+        result.push(buff);
+    }
+
+    return result;
 }
 
 module.exports = {
     sendEvent: sendEvent,
-    extractLanguage: extractLanguage
+    parseLanguageCode: parseLanguageCode,
+    extractLanguages: extractLanguages
 };

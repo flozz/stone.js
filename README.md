@@ -355,6 +355,10 @@ This event is fired each time the locale changes (using the `Stone.setLocale` fu
 
 ## Changelog
 
+* **2.1.0**:
+    * Better language code handling (now support locales with dialect like fr_FR, fr_CA,...)
+    * New function to select the best catalog from a language list (`setBestMatchingLocale`)
+
 * **2.0.0**:
     * new javascript tools to replace the old pythonic ones
     * new file format (incompatible with the previous version!) to be ready for plural forms (ngettext) support

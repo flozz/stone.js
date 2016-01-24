@@ -69,7 +69,8 @@ module.exports = function(grunt) {
                 nonew: true,
                 undef: true,
                 curly: true,
-                browser: true
+                browser: true,
+                node: true
             }
         },
 

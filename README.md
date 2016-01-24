@@ -141,7 +141,7 @@ The last step to display your application into plenty of languages is to load th
     };
 
     window._ = Stone.gettext;       // Alias the Stone.gettext function
-    Stone.addCatalogs("catalogs");  // Add catalogs (here it is hard coded for the need of the example
+    Stone.addCatalogs(catalogs);    // Add catalogs (here it is hard coded for the need of the example
     Stone.enableDomScan(true);      // Allow Stone.js to scan the DOM to find translatable nodes
     Stone.setLocale("fr");          // Sets the locale to french
 

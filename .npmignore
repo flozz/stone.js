@@ -4,3 +4,5 @@ test
 Gruntfile.js
 .travis.yml
 .jscsrc
+.jshintrc
+.tern-project

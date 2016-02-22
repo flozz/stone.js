@@ -283,7 +283,7 @@ Find and return the given locale that best matches the given catalogs.
 **params:**
 
 * `locales`: string or array of string (e.g. `"fr"`, `["fr", "fr_FR", "en_US"]`).
-* `catalogs` array of string (e.g. `["fr_FR", "en"]`).
+* `catalogs`: array of string (e.g. `["fr_FR", "en"]`).
 
 **Example:**
 
@@ -371,6 +371,9 @@ This event is fired each time the locale changes (using the `Stone.setLocale` fu
 
 
 ## Changelog
+
+* **2.2.0**:
+    * New function to find the best matching catalog from given locales and catalogs (`findBestMatchingLocale`)
 
 * **2.1.0**:
     * Better language code handling (now support locales with dialect like fr_FR, fr_CA,...)

@@ -7,7 +7,17 @@
   "nonbsp": true,
   "nonew": true,
   "undef": true,
-  "curly": true,
   "browser": true,
-  "node": true
+  "browserify": true,
+  "mocha": true,
+  "shadow": false,
+  "esnext": false,
+  "loopfunc": false,
+  "jasmine": true,
+  "globals": {
+    "StoneTest": false,
+    "CATALOGS": false,
+    "_sendEvent": false,
+    "_addHtml": false
+  }
 }

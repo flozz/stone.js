@@ -48,29 +48,10 @@ module.exports = function(grunt) {
             tests: {
                 files: {
                     src: ["test/*Spec.js"]
-                },
-                options: {
-                    jasmine: true,
-                    globals: {
-                        StoneTest: false,
-                        CATALOGS: false,
-                        _sendEvent: false,
-                        _addHtml: false
-                    }
                 }
             },
             options: {
-                futurehostile: true,
-                freeze: true,
-                latedef: true,
-                noarg: true,
-                nocomma: true,
-                nonbsp: true,
-                nonew: true,
-                undef: true,
-                curly: true,
-                browser: true,
-                node: true
+                jshintrc: true
             }
         },
 

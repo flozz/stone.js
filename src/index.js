@@ -56,6 +56,7 @@ module.exports = {
     getLocale: gettext.getLocale,
     setLocale: setLocale,
     setBestMatchingLocale: gettext.setBestMatchingLocale,
+    findBestMatchingLocale: helpers.findBestMatchingLocale,
     guessUserLanguage: guessUserLanguage,
     enableDomScan: dom.enableDomScan,
     updateDomTranslation: dom.updateDomTranslation

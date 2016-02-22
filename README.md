@@ -274,6 +274,23 @@ setBestMatchingLocale("fr");    // Finds the catalog that best match "fr" ("fr",
 setBestMatchingLocale(["fr", "en_US", "en_UK"]);    // Finds the best available catalog from the given list
 ```
 
+### Stone.findBestMatchingLocale
+
+Find and return the given locale that best matches the given catalogs.
+
+    Stone.findBestMatchingLocale( [locales], [catalogs] );
+
+**params:**
+
+* `locales`: string or array of string (e.g. `"fr"`, `["fr", "fr_FR", "en_US"]`).
+* `catalogs` array of string (e.g. `["fr_FR", "en"]`).
+
+**Example:**
+
+```javascript
+Stone.findBestMatchingLocale(["fr"], ["pt_BR", "fr_CA", "fr_FR"]);  // -> "fr_FR"
+```
+
 ### Stone.guessUserLanguage
 
 Tries to guess the user language (based on the browser's preferred languages).

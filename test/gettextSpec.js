@@ -24,7 +24,8 @@ describe("gettext", function () {
                 pt_BR: {},
                 es_ES: {},
                 es_AR: {},
-                de: {}
+                de: {},
+                foolang: {}
             });
         });
 

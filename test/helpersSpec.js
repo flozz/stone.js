@@ -41,7 +41,7 @@ describe("helpers", function () {
 
             spyOn(cb, "callback").and.callThrough();
 
-            addEventListener("stone-event-test", cb.callback);
+            document.addEventListener("stone-event-test", cb.callback);
             StoneTest.helpers.sendEvent("stone-event-test");
         });
 
@@ -55,7 +55,7 @@ describe("helpers", function () {
 
             spyOn(cb, "callback").and.callThrough();
 
-            addEventListener("stone-event-test-data", cb.callback);
+            document.addEventListener("stone-event-test-data", cb.callback);
             StoneTest.helpers.sendEvent("stone-event-test-data", {foo: "bar"});
         });
 

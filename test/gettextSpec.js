@@ -1,6 +1,7 @@
 describe("gettext", function () {
 
     beforeAll(function () {
+        StoneTest.index.clearCatalogs();
         StoneTest.index.addCatalogs(CATALOGS);
     });
 
@@ -195,6 +196,56 @@ describe("gettext", function () {
 
         it("can return a splitted translated string", function () {
             expect(this.lazy.split(" ")).toEqual(["Bonjour", "le", "monde"]);
+        });
+
+    });
+
+    describe("catalogs", function () {
+
+        beforeAll(function () {
+            StoneTest.index.clearCatalogs();
+            StoneTest.index.addCatalogs({
+                fr: {
+                    "plural-forms": "nplurals=2; plural=(n > 1);",
+                    messages: {
+                        Hello: ["Bonjour"],
+                        World: ["Monde"]
+                    }
+                },
+                it: {
+                    "plural-forms": "nplurals=2; plural=(n != 1);",
+                    messages: {
+                        Hello: ["Buongiorno"]
+                    }
+                }
+            });
+
+            StoneTest.index.addCatalogs({
+                fr: {
+                    "plural-forms": "nplurals=2; plural=(n > 1);",
+                    messages: {
+                        Hello: ["Salut"]
+                    }
+                },
+                en: {
+                    "plural-forms": "nplurals=2; plural=(n != 1);",
+                    messages: {
+                        Hello: ["Hi"]
+                    }
+                }
+            });
+        });
+
+        it("are merged when multi-source are added", function () {
+            StoneTest.index.setLocale("fr");
+            expect(StoneTest.index.gettext("Hello")).toEqual("Salut");
+            expect(StoneTest.index.gettext("World")).toEqual("Monde");
+
+            StoneTest.index.setLocale("it");
+            expect(StoneTest.index.gettext("Hello")).toEqual("Buongiorno");
+
+            StoneTest.index.setLocale("en");
+            expect(StoneTest.index.gettext("Hello")).toEqual("Hi");
         });
 
     });

@@ -155,9 +155,22 @@ function lazyGettext(string, replacements) {
     return new LazyString(string, replacements);
 }
 
+function clearCatalogs() {
+    for (var locale in catalogs) {
+        delete catalogs[locale];
+    }
+}
+
 function addCatalogs(newCatalogs) {
     for (var locale in newCatalogs) {
-        catalogs[locale] = newCatalogs[locale];
+        if (catalogs[locale]) {
+            catalogs[locale]["plural-forms"] = newCatalogs[locale]["plural-forms"];
+            for (var message in newCatalogs[locale].messages) {
+                catalogs[locale].messages[message] = newCatalogs[locale].messages[message];
+            }
+        } else {
+            catalogs[locale] = newCatalogs[locale];
+        }
     }
 }
 
@@ -180,9 +193,11 @@ function setBestMatchingLocale(l) {
 }
 
 module.exports = {
+    catalogs: catalogs,
     LazyString: LazyString,
     gettext: gettext,
     lazyGettext: lazyGettext,
+    clearCatalogs: clearCatalogs,
     addCatalogs: addCatalogs,
     getLocale: getLocale,
     setLocale: setLocale,
@@ -479,6 +494,7 @@ module.exports = {
     LazyString: gettext.LazyString,
     gettext: gettext.gettext,
     lazyGettext: gettext.lazyGettext,
+    clearCatalogs: gettext.clearCatalogs,
     addCatalogs: gettext.addCatalogs,
     getLocale: gettext.getLocale,
     setLocale: setLocale,

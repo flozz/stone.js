@@ -68,7 +68,7 @@ var text = "Hello World";
 
 // --- by ----
 
-var text = _("Hello World"); 
+var text = _("Hello World");
 
 // NOTE: you can also write Stone.gettext("Hello World")
 // if you do not want to create the "_" alias for the gettext function
@@ -371,6 +371,9 @@ This event is fired each time the locale changes (using the `Stone.setLocale` fu
 
 
 ## Changelog
+
+* **2.3.0**:
+    * The `addCatalog` function now merge catalogs.
 
 * **2.2.0**:
     * New function to find the best matching catalog from given locales and catalogs (`findBestMatchingLocale`)

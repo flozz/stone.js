@@ -53,7 +53,7 @@ Then include it where you need it, and create an alias for the `Stone.gettext` f
 var Stone = require("stonejs");
 var _ = Stone.gettext;
 
-// Using ES6 module
+// Using ES6 modules
 import Stone, { gettext as _ } from "stonejs";
 ```
 

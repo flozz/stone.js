@@ -48,8 +48,13 @@ First install the `stonejs` package:
 Then include it where you need it, and create an alias for the `Stone.gettext` function:
 
 ```javascript
+// using CommonJS modules
+
 var Stone = require("stonejs");
 var _ = Stone.gettext;
+
+// using ES6 modules
+import Stone, { gettext as _ } from "stonejs";
 ```
 
 

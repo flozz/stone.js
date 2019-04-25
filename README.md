@@ -242,6 +242,19 @@ var locale = Stone.getLocale();
 // "c", "en", "fr", ...
 ```
 
+### Stone.listCatalogs
+
+Returns all availables catalogs.
+
+    String: Stone.listCatalogs();
+
+**Examples:**
+
+```javascript
+var catalogsList = Stone.listCatalogs();
+// ["c", "en", "fr", ... ]
+```
+
 
 ### Stone.setLocale
 

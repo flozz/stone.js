@@ -86,6 +86,10 @@ function clearCatalogs() {
     }
 }
 
+function listCatalogs() {
+    return Object.keys(catalogs);
+}
+
 function addCatalogs(newCatalogs) {
     for (var locale in newCatalogs) {
         if (catalogs[locale]) {
@@ -124,6 +128,7 @@ module.exports = {
     lazyGettext: lazyGettext,
     clearCatalogs: clearCatalogs,
     addCatalogs: addCatalogs,
+    listCatalogs: listCatalogs,
     getLocale: getLocale,
     setLocale: setLocale,
     setBestMatchingLocale: setBestMatchingLocale

@@ -242,6 +242,19 @@ var locale = Stone.getLocale();
 // "c", "en", "fr", ...
 ```
 
+### Stone.getLocales
+
+Returns all availables locales.
+
+    String: Stone.getLocales();
+
+**Examples:**
+
+```javascript
+var locales = Stone.getLocales();
+// {"c", "en", "fr", ... }
+```
+
 
 ### Stone.setLocale
 

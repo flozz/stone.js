@@ -390,6 +390,9 @@ This event is fired each time the locale changes (using the `Stone.setLocale` fu
 
 ## Changelog
 
+* **2.4.0:**
+    * Adds the `listCatalogs` methods to list available catalogs (thanx @BobRazowsky, #12)
+
 * **2.3.0**:
     * The `addCatalog` function now merge catalogs.
 

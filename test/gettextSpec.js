@@ -14,6 +14,18 @@ describe("gettext", function () {
 
     });
 
+    describe("listCatalogs", function () {
+
+        it("can list all the catalogs", function () {
+            StoneTest.index.listCatalogs();
+            expect(StoneTest.index.listCatalogs()).toContain("fr");
+            expect(StoneTest.index.listCatalogs()).toContain("en");
+            expect(StoneTest.index.listCatalogs()).toContain("it");
+            expect(StoneTest.index.listCatalogs().length).toEqual(3);
+        });
+
+    });
+
     describe("setBestMatchingLocale", function () {
 
         beforeAll(function () {

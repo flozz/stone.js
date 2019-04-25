@@ -86,8 +86,8 @@ function clearCatalogs() {
     }
 }
 
-function getLocales() {
-    return catalogs;
+function listCatalogs() {
+    return Object.keys(catalogs);
 }
 
 function addCatalogs(newCatalogs) {
@@ -128,6 +128,7 @@ module.exports = {
     lazyGettext: lazyGettext,
     clearCatalogs: clearCatalogs,
     addCatalogs: addCatalogs,
+    listCatalogs: listCatalogs,
     getLocale: getLocale,
     setLocale: setLocale,
     setBestMatchingLocale: setBestMatchingLocale

@@ -86,6 +86,10 @@ function clearCatalogs() {
     }
 }
 
+function getLocales() {
+    return catalogs;
+}
+
 function addCatalogs(newCatalogs) {
     for (var locale in newCatalogs) {
         if (catalogs[locale]) {

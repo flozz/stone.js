@@ -56,6 +56,7 @@ module.exports = {
     addCatalogs: gettext.addCatalogs,
     getLocale: gettext.getLocale,
     setLocale: setLocale,
+    getLocales: gettext.getLocales,
     setBestMatchingLocale: gettext.setBestMatchingLocale,
     findBestMatchingLocale: helpers.findBestMatchingLocale,
     guessUserLanguage: guessUserLanguage,

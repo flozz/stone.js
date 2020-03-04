@@ -33,12 +33,14 @@ var helpers = require("./helpers.js");
 var catalogs = {};
 var locale = null;
 
-function gettext(string, replacements) {
+function gettext(string, replacements, locale_parameter) {
     var result = string;
+    var locale_value = locale_parameter || locale;
 
-    if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string] &&
-        catalogs[locale].messages[string].length > 0 && catalogs[locale].messages[string][0] !== "") {
-        result = catalogs[locale].messages[string][0];
+    if (locale_value && catalogs[locale_value] && catalogs[locale_value].messages &&
+        catalogs[locale_value].messages[string] && catalogs[locale_value].messages[string].length > 0 &&
+        catalogs[locale_value].messages[string][0] !== "") {
+        result = catalogs[locale_value].messages[string][0];
     }
 
     if (replacements) {

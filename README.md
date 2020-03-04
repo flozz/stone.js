@@ -185,13 +185,15 @@ The last step to display your application into plenty of languages is to load th
 ### Stone.gettext
 
 Translates the given string to the current language.
-
-    String: Stone.gettext( <string> [, replacements] );
+    
+    String: Stone.gettext( <string> [, locale] );
+    String: Stone.gettext( <string> [, replacements] [, locale] );
 
 **params:**
 
 * `string`: The string to translate.
 * `replacements`: an object containing replacements for the string (optional, see example below).
+* `locale`: The locale string to use for translation (default: current locale)
 
 **returns:**
 

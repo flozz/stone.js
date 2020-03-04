@@ -31,16 +31,20 @@
 var helpers = require("./helpers.js");
 
 var catalogs = {};
-var locale = null;
+var locale_default = null;
 
-function gettext(string, replacements, locale_parameter) {
+function gettext(string, replacements, local_parameter) {
     var result = string;
-    var locale_value = locale_parameter || locale;
+    if (typeof replacements === 'string') {
+        local_parameter = replacements;
+        replacements = undefined;
+    }
+    var locale = local_parameter || locale_default;
 
-    if (locale_value && catalogs[locale_value] && catalogs[locale_value].messages &&
-        catalogs[locale_value].messages[string] && catalogs[locale_value].messages[string].length > 0 &&
-        catalogs[locale_value].messages[string][0] !== "") {
-        result = catalogs[locale_value].messages[string][0];
+    if (locale && catalogs[locale] && catalogs[locale].messages &&
+        catalogs[locale].messages[string] && catalogs[locale].messages[string].length > 0 &&
+        catalogs[locale].messages[string][0] !== "") {
+        result = catalogs[locale].messages[string][0];
     }
 
     if (replacements) {
@@ -106,11 +110,11 @@ function addCatalogs(newCatalogs) {
 }
 
 function getLocale() {
-    return locale;
+    return locale_default;
 }
 
 function setLocale(l) {
-    locale = l;
+    locale_default = l;
 }
 
 function setBestMatchingLocale(l) {

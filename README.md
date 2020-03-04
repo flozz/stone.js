@@ -154,10 +154,13 @@ The last step to display your application into plenty of languages is to load th
     console.log(_("Hello World"));
     // Bonjour le monde
 
+    console.log(_("Hello World", "it"));
+    // Buongiorno il mondo
+
     console.log(_("Hello {name}", {name: "John"}));
     // Bonjour John
 
-    console.log(_("Hello {name}", {name: "John"}, 'it'));
+    console.log(_("Hello {name}", {name: "John"}, "it"));
     // Buongiorno John
 
     var text = Stone.lazyGettext("Hello World");
@@ -205,8 +208,9 @@ The translated string.
 
 ```javascript
 var text1 = Stone.gettext("Hello World");
+var text1 = Stone.gettext("Hello World", "it");
 var text2 = Stone.gettext("Hello {name}", {name: "John"});
-var text3 = Stone.gettext("Hello {name}", {name: "John"}, 'it');
+var text3 = Stone.gettext("Hello {name}", {name: "John"}, "it");
 ```
 
 

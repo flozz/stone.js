@@ -139,6 +139,7 @@ describe("gettext", function () {
             expect(StoneTest.index.gettext("Hello World")).toEqual("Bonjour le monde");
             StoneTest.index.setLocale("it");
             expect(StoneTest.index.gettext("Hello World")).toEqual("Buongiorno il mondo");
+            expect(StoneTest.index.gettext("Hello World", "fr")).toEqual("Bonjour le monde");
         });
 
         it("can translates strings with replacements", function () {
@@ -152,6 +153,7 @@ describe("gettext", function () {
             expect(StoneTest.index.gettext("Hello {name}", {name: "John"})).toEqual("Bonjour John");
             StoneTest.index.setLocale("it");
             expect(StoneTest.index.gettext("Hello {name}", {name: "John"})).toEqual("Buongiorno John");
+            expect(StoneTest.index.gettext("Hello {name}", {name: "John"}, "fr")).toEqual("Bonjour John");
         });
 
     });

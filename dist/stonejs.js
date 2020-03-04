@@ -110,7 +110,7 @@ var locale_default = null;
 
 function gettext(string, replacements, locale_parameter) {
     var result = string;
-    if (typeof replacements == 'string') {
+    if (typeof replacements == "string") {
         locale_parameter = replacements;
         replacements = undefined;
     }

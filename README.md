@@ -206,6 +206,7 @@ The translated string.
 ```javascript
 var text1 = Stone.gettext("Hello World");
 var text2 = Stone.gettext("Hello {name}", {name: "John"});
+var text3 = Stone.gettext("Hello {name}", {name: "John"}, 'it');
 ```
 
 
@@ -213,7 +214,8 @@ var text2 = Stone.gettext("Hello {name}", {name: "John"});
 
 Same as `Stone.gettext` but returns a `Stone.LazyString` instead of a `String`.
 
-    String: Stone.lazyGettext( <string> [, replacements] );
+    String: Stone.lazyGettext( <string> [, locale] );
+    String: Stone.lazyGettext( <string> [, replacements] [, locale] );
 
 
 ### Stone.addCatalogs

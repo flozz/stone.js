@@ -110,15 +110,14 @@ var locale_default = null;
 
 function gettext(string, replacements, locale_parameter) {
     var result = string;
-    if (typeof replacements === 'string') {
+    if (typeof replacements == 'string') {
         locale_parameter = replacements;
         replacements = undefined;
     }
     var locale = locale_parameter || locale_default;
 
-    if (locale && catalogs[locale] && catalogs[locale].messages &&
-        catalogs[locale].messages[string] && catalogs[locale].messages[string].length > 0 &&
-        catalogs[locale].messages[string][0] !== "") {
+    if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string] &&
+        catalogs[locale].messages[string].length > 0 && catalogs[locale].messages[string][0] !== "") {
         result = catalogs[locale].messages[string][0];
     }
 

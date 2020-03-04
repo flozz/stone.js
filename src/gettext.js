@@ -33,13 +33,13 @@ var helpers = require("./helpers.js");
 var catalogs = {};
 var locale_default = null;
 
-function gettext(string, replacements, local_parameter) {
+function gettext(string, replacements, locale_parameter) {
     var result = string;
     if (typeof replacements === 'string') {
-        local_parameter = replacements;
+        locale_parameter = replacements;
         replacements = undefined;
     }
-    var locale = local_parameter || locale_default;
+    var locale = locale_parameter || locale_default;
 
     if (locale && catalogs[locale] && catalogs[locale].messages &&
         catalogs[locale].messages[string] && catalogs[locale].messages[string].length > 0 &&
@@ -56,8 +56,8 @@ function gettext(string, replacements, local_parameter) {
     return result;
 }
 
-function LazyString(string, replacements) {
-    this.toString = gettext.bind(this, string, replacements);
+function LazyString(string, replacements, locale) {
+    this.toString = gettext.bind(this, string, replacements, locale);
 
     var props = Object.getOwnPropertyNames(String.prototype);
     for (var i = 0 ; i < props.length ; i++) {
@@ -82,8 +82,8 @@ function LazyString(string, replacements) {
     }
 }
 
-function lazyGettext(string, replacements) {
-    return new LazyString(string, replacements);
+function lazyGettext(string, replacements, locale) {
+    return new LazyString(string, replacements, locale);
 }
 
 function clearCatalogs() {

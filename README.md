@@ -157,6 +157,8 @@ The last step to display your application into plenty of languages is to load th
     console.log(_("Hello {name}", {name: "John"}));
     // Bonjour John
 
+    console.log(_("Hello {name}", {name: "John"}, 'it'));
+    // Buongiorno John
 
     var text = Stone.lazyGettext("Hello World");
 
@@ -192,8 +194,8 @@ Translates the given string to the current language.
 **params:**
 
 * `string`: The string to translate.
+* `locale`: The locale string to use for translation (optional, default: current locale).
 * `replacements`: an object containing replacements for the string (optional, see example below).
-* `locale`: The locale string to use for translation (default: current locale)
 
 **returns:**
 

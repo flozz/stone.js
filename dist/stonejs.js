@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Stone = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Stone = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /*
  * Copyright (c) 2014-2015, Fabien LOISON <http://flozz.fr>
  * All rights reserved.
@@ -106,10 +106,15 @@ module.exports = {
 var helpers = require("./helpers.js");
 
 var catalogs = {};
-var locale = null;
+var locale_default = null;
 
-function gettext(string, replacements) {
+function gettext(string, replacements, locale_parameter) {
     var result = string;
+    if (typeof replacements == "string") {
+        locale_parameter = replacements;
+        replacements = undefined;
+    }
+    var locale = locale_parameter || locale_default;
 
     if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string] &&
         catalogs[locale].messages[string].length > 0 && catalogs[locale].messages[string][0] !== "") {
@@ -125,8 +130,8 @@ function gettext(string, replacements) {
     return result;
 }
 
-function LazyString(string, replacements) {
-    this.toString = gettext.bind(this, string, replacements);
+function LazyString(string, replacements, locale) {
+    this.toString = gettext.bind(this, string, replacements, locale);
 
     var props = Object.getOwnPropertyNames(String.prototype);
     for (var i = 0 ; i < props.length ; i++) {
@@ -151,8 +156,8 @@ function LazyString(string, replacements) {
     }
 }
 
-function lazyGettext(string, replacements) {
-    return new LazyString(string, replacements);
+function lazyGettext(string, replacements, locale) {
+    return new LazyString(string, replacements, locale);
 }
 
 function clearCatalogs() {
@@ -179,11 +184,11 @@ function addCatalogs(newCatalogs) {
 }
 
 function getLocale() {
-    return locale;
+    return locale_default;
 }
 
 function setLocale(l) {
-    locale = l;
+    locale_default = l;
 }
 
 function setBestMatchingLocale(l) {

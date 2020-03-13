@@ -154,9 +154,14 @@ The last step to display your application into plenty of languages is to load th
     console.log(_("Hello World"));
     // Bonjour le monde
 
+    console.log(_("Hello World", "it"));
+    // Buongiorno il mondo
+
     console.log(_("Hello {name}", {name: "John"}));
     // Bonjour John
 
+    console.log(_("Hello {name}", {name: "John"}, "it"));
+    // Buongiorno John
 
     var text = Stone.lazyGettext("Hello World");
 
@@ -185,12 +190,14 @@ The last step to display your application into plenty of languages is to load th
 ### Stone.gettext
 
 Translates the given string to the current language.
-
-    String: Stone.gettext( <string> [, replacements] );
+    
+    String: Stone.gettext( <string> [, locale] );
+    String: Stone.gettext( <string> [, replacements] [, locale] );
 
 **params:**
 
 * `string`: The string to translate.
+* `locale`: The locale string to use for translation (optional, default: current locale).
 * `replacements`: an object containing replacements for the string (optional, see example below).
 
 **returns:**
@@ -201,7 +208,9 @@ The translated string.
 
 ```javascript
 var text1 = Stone.gettext("Hello World");
+var text1 = Stone.gettext("Hello World", "it");
 var text2 = Stone.gettext("Hello {name}", {name: "John"});
+var text3 = Stone.gettext("Hello {name}", {name: "John"}, "it");
 ```
 
 
@@ -209,7 +218,8 @@ var text2 = Stone.gettext("Hello {name}", {name: "John"});
 
 Same as `Stone.gettext` but returns a `Stone.LazyString` instead of a `String`.
 
-    String: Stone.lazyGettext( <string> [, replacements] );
+    String: Stone.lazyGettext( <string> [, locale] );
+    String: Stone.lazyGettext( <string> [, replacements] [, locale] );
 
 
 ### Stone.addCatalogs

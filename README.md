@@ -190,7 +190,7 @@ The last step to display your application into plenty of languages is to load th
 ### Stone.gettext
 
 Translates the given string to the current language.
-    
+
     String: Stone.gettext( <string> [, locale] );
     String: Stone.gettext( <string> [, replacements] [, locale] );
 
@@ -400,8 +400,11 @@ This event is fired each time the locale changes (using the `Stone.setLocale` fu
 
 ## Changelog
 
+* **2.5.0:**
+   * Allow to override the local for a particular `gettext()` call (thanks @JochLAin, #13)
+
 * **2.4.0:**
-    * Adds the `listCatalogs` methods to list available catalogs (thanx @BobRazowsky, #12)
+    * Adds the `listCatalogs` methods to list available catalogs (thanks @BobRazowsky, #12)
 
 * **2.3.0**:
     * The `addCatalog` function now merge catalogs.

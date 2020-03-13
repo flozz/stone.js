@@ -1,6 +1,6 @@
 {
   "name": "stonejs",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "gettext-like client-side Javascript Internationalization Library",
   "main": "src/index.js",
   "devDependencies": {

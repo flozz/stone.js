@@ -78,7 +78,7 @@ describe("helpers", function () {
 
         it("throws error when plural forms are not valid", function () {
             expect(function () {
-                StoneTest.helpers.extractPluralForms("nplural=6; plural=(window.admin=true)? 0 : 1");
+                StoneTest.helpers.extractPluralForms("nplurals=6; plural=(window.admin=true)? 0 : 1");
             }).toThrowError();
         });
     });

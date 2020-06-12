@@ -66,6 +66,21 @@ describe("helpers", function () {
             expect(StoneTest.helpers.extractPluralForms("nplurals=2; plural=(n != 1);").trim()).toEqual("(n != 1)");
             expect(StoneTest.helpers.extractPluralForms("nplurals=2; plural=(n > 1);").trim()).toEqual("(n > 1)");
         });
+
+        it("handles complex plural forms", function () {
+            var arabic = "nplurals=6; plural=" +
+                "(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);";
+            expect(StoneTest.helpers.extractPluralForms(arabic)).toBeDefined();
+            var russian = "nplurals=3; plural=" +
+                "(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);";
+            expect(StoneTest.helpers.extractPluralForms(russian)).toBeDefined();
+        });
+
+        it("throws error when plural forms are not valid", function () {
+            expect(function () {
+                StoneTest.helpers.extractPluralForms("nplural=6; plural=(window.admin=true)? 0 : 1");
+            }).toThrowError();
+        });
     });
 
     describe("generatePluralFormsFunction", function () {

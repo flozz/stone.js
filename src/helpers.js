@@ -226,6 +226,9 @@ function findBestMatchingLocale(locale, catalogs) {
 }
 
 function extractPluralForms(pluralForms) {
+    if (!/^nplurals=[=\d]\s*;\s*plural=[()n\s<>=\d&|%?!:+\-*\/]+;?$/g.test(pluralForms)) {
+        throw new Error("plural forms are not valid");
+    }
     return pluralForms.split(";")[1].replace("plural=", "");
 }
 

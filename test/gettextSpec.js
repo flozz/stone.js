@@ -158,6 +158,54 @@ describe("gettext", function () {
 
     });
 
+    describe("ngettext", function () {
+        it("can translates strings", function () {
+            StoneTest.index.setLocale(null);
+            expect(StoneTest.index.ngettext("horse", "horses", 0)).toEqual("horses");
+            expect(StoneTest.index.ngettext("horse", "horses", 1)).toEqual("horse");
+            expect(StoneTest.index.ngettext("horse", "horses", 2)).toEqual("horses");
+            StoneTest.index.setLocale("xx");
+            expect(StoneTest.index.ngettext("horse", "horses", 0)).toEqual("horses");
+            expect(StoneTest.index.ngettext("horse", "horses", 1)).toEqual("horse");
+            expect(StoneTest.index.ngettext("horse", "horses", 2)).toEqual("horses");
+            StoneTest.index.setLocale("en");
+            expect(StoneTest.index.ngettext("horse", "horses", 0)).toEqual("horses");
+            expect(StoneTest.index.ngettext("horse", "horses", 1)).toEqual("horse");
+            expect(StoneTest.index.ngettext("horse", "horses", 2)).toEqual("horses");
+            StoneTest.index.setLocale("fr");
+            expect(StoneTest.index.ngettext("horse", "horses", 0)).toEqual("cheval");
+            expect(StoneTest.index.ngettext("horse", "horses", 1)).toEqual("cheval");
+            expect(StoneTest.index.ngettext("horse", "horses", 2)).toEqual("chevaux");
+            StoneTest.index.setLocale("it");
+            expect(StoneTest.index.ngettext("horse", "horses", 0)).toEqual("cavalli");
+            expect(StoneTest.index.ngettext("horse", "horses", 1)).toEqual("cavallo");
+            expect(StoneTest.index.ngettext("horse", "horses", 2)).toEqual("cavalli");
+        });
+
+        it("can translates strings with replacements", function () {
+            StoneTest.index.setLocale(null);
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 0, {n: 0})).toEqual("0 apples");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 1, {n: 1})).toEqual("1 apple");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 2, {n: 2})).toEqual("2 apples");
+            StoneTest.index.setLocale("xx");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 0, {n: 0})).toEqual("0 apples");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 1, {n: 1})).toEqual("1 apple");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 2, {n: 2})).toEqual("2 apples");
+            StoneTest.index.setLocale("en");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 0, {n: 0})).toEqual("0 apples");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 1, {n: 1})).toEqual("1 apple");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 2, {n: 2})).toEqual("2 apples");
+            StoneTest.index.setLocale("fr");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 0, {n: 0})).toEqual("0 pomme");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 1, {n: 1})).toEqual("1 pomme");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 2, {n: 2})).toEqual("2 pommes");
+            StoneTest.index.setLocale("it");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 0, {n: 0})).toEqual("0 mele");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 1, {n: 1})).toEqual("1 mela");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 2, {n: 2})).toEqual("2 mele");
+        });
+    });
+
     describe("lazyGettext", function () {
 
         it("can translates strings", function () {

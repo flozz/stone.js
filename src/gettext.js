@@ -32,6 +32,7 @@ var helpers = require("./helpers.js");
 
 var catalogs = {};
 var locale_default = null;
+var pluralFormsFunctions = {};
 
 function gettext(string, replacements, locale_parameter) {
     var result = string;
@@ -44,6 +45,52 @@ function gettext(string, replacements, locale_parameter) {
     if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string] &&
         catalogs[locale].messages[string].length > 0 && catalogs[locale].messages[string][0] !== "") {
         result = catalogs[locale].messages[string][0];
+    }
+
+    if (replacements) {
+        for (var r in replacements) {
+            result = result.replace(new RegExp("\{" + r + "\}", "g"), replacements[r]);
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Usage:
+ * ```
+ * ngettext("{n} file removed", "{n} files removed", n)
+ * ngettext("{n} file removed", "{n} files removed", n, {n: n})
+ * ngettext("{count} file removed", "{count} files removed", n, {count: n})
+ * ```
+ * @param {string} string
+ * @param {string} stringPlural
+ * @param {number} number
+ * @param {Object} [replacements]
+ * @param {string} [locale_parameter]
+ */
+function ngettext(string, stringPlural, number, replacements, locale_parameter) {
+    var result = number === 1 ? string : stringPlural;
+    if (typeof replacements == "string") {
+        locale_parameter = replacements;
+        replacements = undefined;
+    }
+    var locale = locale_parameter || locale_default;
+
+    var messages;
+    var pluralForms;
+    if (locale && catalogs[locale] && catalogs[locale].messages) {
+        pluralForms = catalogs[locale]["plural-forms"];
+        messages = catalogs[locale].messages[string];
+    }
+    if (pluralForms && messages && messages.length > 0) {
+        if (!pluralFormsFunctions[locale]) {
+            pluralFormsFunctions[locale] = helpers.generatePluralFormsFunction(pluralForms);
+        }
+        var pluralIndex = pluralFormsFunctions[locale](number);
+        if (messages[pluralIndex] && messages[pluralIndex] !== "") {
+            result = messages[pluralIndex];
+        }
     }
 
     if (replacements) {
@@ -131,6 +178,7 @@ module.exports = {
     LazyString: LazyString,
     gettext: gettext,
     lazyGettext: lazyGettext,
+    ngettext: ngettext,
     clearCatalogs: clearCatalogs,
     addCatalogs: addCatalogs,
     listCatalogs: listCatalogs,

@@ -204,6 +204,29 @@ describe("gettext", function () {
             expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 1, {n: 1})).toEqual("1 mela");
             expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 2, {n: 2})).toEqual("2 mele");
         });
+
+        it("provides given number as implicit replacement", function () {
+            StoneTest.index.setLocale(null);
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 0)).toEqual("0 apples");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 1)).toEqual("1 apple");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 2)).toEqual("2 apples");
+            StoneTest.index.setLocale("xx");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 0)).toEqual("0 apples");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 1)).toEqual("1 apple");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 2)).toEqual("2 apples");
+            StoneTest.index.setLocale("en");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 0)).toEqual("0 apples");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 1)).toEqual("1 apple");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 2)).toEqual("2 apples");
+            StoneTest.index.setLocale("fr");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 0)).toEqual("0 pomme");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 1)).toEqual("1 pomme");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 2)).toEqual("2 pommes");
+            StoneTest.index.setLocale("it");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 0)).toEqual("0 mele");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 1)).toEqual("1 mela");
+            expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 2)).toEqual("2 mele");
+        });
     });
 
     describe("lazyGettext", function () {

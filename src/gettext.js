@@ -93,10 +93,14 @@ function ngettext(string, stringPlural, number, replacements, locale_parameter) 
         }
     }
 
-    if (replacements) {
-        for (var r in replacements) {
-            result = result.replace(new RegExp("\{" + r + "\}", "g"), replacements[r]);
-        }
+    if (!replacements) {
+        replacements = {};
+    }
+    if (replacements.n === undefined) {
+        replacements.n = number;
+    }
+    for (var r in replacements) {
+        result = result.replace(new RegExp("\{" + r + "\}", "g"), replacements[r]);
     }
 
     return result;

@@ -53,6 +53,8 @@ module.exports = {
     gettext: gettext.gettext,
     lazyGettext: gettext.lazyGettext,
     ngettext: gettext.ngettext,
+    lazyNgettext: gettext.lazyNgettext,
+    LazyNString: gettext.LazyNString,
     clearCatalogs: gettext.clearCatalogs,
     addCatalogs: gettext.addCatalogs,
     getLocale: gettext.getLocale,

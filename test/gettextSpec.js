@@ -285,6 +285,42 @@ describe("gettext", function () {
 
     });
 
+    describe("LazyNString", function () {
+
+        beforeAll(function () {
+            StoneTest.index.setLocale("fr");
+        });
+
+        beforeEach(function () {
+            this.lazy = new StoneTest.index.LazyNString("{n} apple", "{n} apples", 2);
+        });
+
+        it("can translate text", function () {
+            expect(this.lazy.toString()).toEqual("2 pommes");
+        });
+
+        it("can mimic the String API", function () {
+            var stringProps = Object.getOwnPropertyNames(String.prototype);
+            var lazyProps = Object.getOwnPropertyNames(this.lazy);
+            for (var i = 0 ; i < stringProps.length ; i++) {
+                expect(lazyProps).toContain(stringProps[i]);
+            }
+        });
+
+        it("can give the translated string length", function () {
+            expect(this.lazy.length).toEqual("2 pommes".length);
+        });
+
+        it("can return the translated string in upperCase", function () {
+            expect(this.lazy.toUpperCase()).toEqual("2 POMMES");
+        });
+
+        it("can return a splitted translated string", function () {
+            expect(this.lazy.split(" ")).toEqual(["2", "pommes"]);
+        });
+
+    });
+
     describe("catalogs", function () {
 
         beforeAll(function () {

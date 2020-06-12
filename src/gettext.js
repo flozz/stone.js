@@ -106,25 +106,23 @@ function ngettext(string, stringPlural, number, replacements, locale_parameter) 
     return result;
 }
 
-function LazyString(string, replacements, locale) {
-    this.toString = gettext.bind(this, string, replacements, locale);
-
+function _copyStringPrototype(object) {
     var props = Object.getOwnPropertyNames(String.prototype);
     for (var i = 0 ; i < props.length ; i++) {
         if (props[i] == "toString") {
             continue;
         }
         if (typeof(String.prototype[props[i]]) == "function") {
-            this[props[i]] = function () {
+            object[props[i]] = function () {
                 var translatedString = this.self.toString();
                 return translatedString[this.prop].apply(translatedString, arguments);
-            }.bind({self: this, prop: props[i]});
+            }.bind({self: object, prop: props[i]});
         } else {
-            Object.defineProperty(this, props[i], {
+            Object.defineProperty(object, props[i], {
                 get: function () {
                     var translatedString = this.self.toString();
                     return translatedString[this.prop];
-                }.bind({self: this, prop: props[i]}),
+                }.bind({self: object, prop: props[i]}),
                 enumerable: false,
                 configurable: false
             });
@@ -132,8 +130,22 @@ function LazyString(string, replacements, locale) {
     }
 }
 
+function LazyString(string, replacements, locale) {
+    this.toString = gettext.bind(this, string, replacements, locale);
+    _copyStringPrototype(this);
+}
+
 function lazyGettext(string, replacements, locale) {
     return new LazyString(string, replacements, locale);
+}
+
+function LazyNString(string, stringPlural, number, replacements, locale) {
+    this.toString = ngettext.bind(this, string, stringPlural, number, replacements, locale);
+    _copyStringPrototype(this);
+}
+
+function lazyNgettext(string, stringPlural, number, replacements, locale) {
+    return new LazyNString(string, stringPlural, number, replacements, locale);
 }
 
 function clearCatalogs() {
@@ -183,6 +195,8 @@ module.exports = {
     gettext: gettext,
     lazyGettext: lazyGettext,
     ngettext: ngettext,
+    lazyNgettext: lazyNgettext,
+    LazyNString: LazyNString,
     clearCatalogs: clearCatalogs,
     addCatalogs: addCatalogs,
     listCatalogs: listCatalogs,

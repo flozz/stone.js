@@ -250,6 +250,10 @@ var text2 = Stone.ngettext("{n} apple", "{n} apples", 3, {n: 3});
 var text3 = Stone.ngettext("{n} apple", "{n} apples", 3); // 'n' is an implicit replacement of given number
 ```
 
+### Stone.lazyNgettext
+
+Same as `Stone.ngettext` but returns a `Stone.LazyNString` instead of a `String`.
+
 ### Stone.addCatalogs
 
 Adds one (or more if you merged multiple languages into one file) string catalog.
@@ -398,6 +402,9 @@ You can find an example of its use in the PhotonUI documentation:
 
 * http://wanadev.github.io/PhotonUI/doc/widgets/translation.html
 
+### Stone.LazyNString (class)
+
+Same as `Stone.LazyString`, using `Stone.ngettext` for plural support.
 
 ### "stonejs-locale-changed" (event)
 

@@ -226,10 +226,12 @@ function findBestMatchingLocale(locale, catalogs) {
 }
 
 function extractPluralForms(pluralForms) {
-    if (!/^nplurals=[=\d]\s*;\s*plural=[()n\s<>=\d&|%?!:+\-*\/]+;?\s*$/g.test(pluralForms)) {
+    var REGEX = /^\s*nplurals=[=\d]\s*;\s*plural=([()n\s<>=\d&|%?!:+\-*\/]+);?[\s\\n]*$/g;
+    var result = REGEX.exec(pluralForms);
+    if (!result) {
         throw new Error("plural forms are not valid");
     }
-    return pluralForms.split(";")[1].replace("plural=", "");
+    return result[1];
 }
 
 function generatePluralFormsFunction(pluralForms) {

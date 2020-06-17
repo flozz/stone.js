@@ -76,6 +76,11 @@ describe("helpers", function () {
             expect(StoneTest.helpers.extractPluralForms(russian)).toBeDefined();
         });
 
+        it("handles plural forms with line feed character", function () {
+            expect(StoneTest.helpers.extractPluralForms("nplurals=2; plural=(n != 1);\n").trim()).toEqual("(n != 1)");
+            expect(StoneTest.helpers.extractPluralForms("nplurals=2; plural=(n > 1);\\n").trim()).toEqual("(n > 1)");
+        });
+
         it("throws error when plural forms are not valid", function () {
             expect(function () {
                 StoneTest.helpers.extractPluralForms("nplurals=6; plural=(window.admin=true)? 0 : 1");

@@ -62,7 +62,7 @@ describe("helpers", function () {
     });
 
     describe("extractPluralForms", function () {
-        it("extracts code part conserning plural variable", function () {
+        it("extracts code part concerning plural variable", function () {
             expect(StoneTest.helpers.extractPluralForms("nplurals=2; plural=(n != 1);").trim()).toEqual("(n != 1)");
             expect(StoneTest.helpers.extractPluralForms("nplurals=2; plural=(n > 1);").trim()).toEqual("(n > 1)");
         });
@@ -89,14 +89,14 @@ describe("helpers", function () {
     });
 
     describe("generatePluralFormsFunction", function () {
-        it("generate function for english plural forms", function () {
+        it("generates function for English plural forms", function () {
             var englishPluralForms = StoneTest.helpers.generatePluralFormsFunction("nplurals=2; plural=(n != 1);");
             expect(englishPluralForms(0)).toEqual(1);
             expect(englishPluralForms(1)).toEqual(0);
             expect(englishPluralForms(2)).toEqual(1);
         });
 
-        it("generate function for french plural forms", function () {
+        it("generates function for French plural forms", function () {
             var frenchPluralForms = StoneTest.helpers.generatePluralFormsFunction("nplurals=2; plural=(n > 1);");
             expect(frenchPluralForms(0)).toEqual(0);
             expect(frenchPluralForms(1)).toEqual(0);

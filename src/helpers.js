@@ -226,12 +226,12 @@ function findBestMatchingLocale(locale, catalogs) {
 }
 
 function extractPluralForms(pluralForms) {
-    var REGEX = /^\s*nplurals=[=\d]\s*;\s*plural=([()n\s<>=\d&|%?!:+\-*\/]+);?[\s\\n]*$/g;
+    var REGEX = /^\s*nplurals=\s*(\d+)\s*;\s*plural=([()n\s<>=\d&|%?!:+\-*\/]+);?[\s\\n]*$/g;
     var result = REGEX.exec(pluralForms);
     if (!result) {
         throw new Error("plural forms are not valid");
     }
-    return result[1];
+    return result[2];
 }
 
 function generatePluralFormsFunction(pluralForms) {

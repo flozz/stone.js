@@ -249,6 +249,14 @@ describe("gettext", function () {
 
     });
 
+    describe("lazyGettext", function () {
+
+        it("doest not operate translation", function () {
+            var someString = "Some string to translate later";
+            expect(StoneTest.index.gettext_noop(someString)).toEqual(someString);
+        });
+    });
+
     describe("LazyString", function () {
 
         beforeAll(function () {

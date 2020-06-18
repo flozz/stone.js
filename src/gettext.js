@@ -148,6 +148,25 @@ function lazyNgettext(string, stringPlural, number, replacements, locale) {
     return new LazyNString(string, stringPlural, number, replacements, locale);
 }
 
+/**
+ * Register a string to be translatable.
+ * Do not operate translation.
+ * Translation can be operated later with `gettext`
+ *
+ * Usage:
+ * ```javascript
+ * // Register the string for translation
+ * var translatable = gettext_noop("Some string to translate later");
+ * // Translate
+ * var translated = gettext(translatable);
+ * ```
+ * @param {string} string string
+ * @returns {string} the exact same given string
+ */
+function gettext_noop(string) {
+    return string;
+}
+
 function clearCatalogs() {
     for (var locale in catalogs) {
         delete catalogs[locale];
@@ -197,6 +216,7 @@ module.exports = {
     ngettext: ngettext,
     lazyNgettext: lazyNgettext,
     LazyNString: LazyNString,
+    gettext_noop: gettext_noop,
     clearCatalogs: clearCatalogs,
     addCatalogs: addCatalogs,
     listCatalogs: listCatalogs,

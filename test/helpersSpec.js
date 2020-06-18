@@ -60,4 +60,51 @@ describe("helpers", function () {
         });
 
     });
+
+    describe("extractPluralExpression", function () {
+        it("extracts code part concerning plural variable", function () {
+            expect(StoneTest.helpers.extractPluralExpression("nplurals=2; plural=(n != 1);").trim())
+                .toEqual("(n != 1)");
+            expect(StoneTest.helpers.extractPluralExpression("nplurals=2; plural=(n > 1);").trim())
+                .toEqual("(n > 1)");
+        });
+
+        it("handles complex plural forms", function () {
+            var arabic = "nplurals=6; plural=" +
+                "(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);";
+            expect(StoneTest.helpers.extractPluralExpression(arabic)).toBeDefined();
+            var russian = "nplurals=3; plural=" +
+                "(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);";
+            expect(StoneTest.helpers.extractPluralExpression(russian)).toBeDefined();
+        });
+
+        it("handles plural forms with line feed character", function () {
+            expect(StoneTest.helpers.extractPluralExpression("nplurals=2; plural=(n != 1);\n").trim())
+                .toEqual("(n != 1)");
+            expect(StoneTest.helpers.extractPluralExpression("nplurals=2; plural=(n > 1);\\n").trim())
+                .toEqual("(n > 1)");
+        });
+
+        it("throws error when plural forms are not valid", function () {
+            expect(function () {
+                StoneTest.helpers.extractPluralExpression("nplurals=6; plural=(window.admin=true)? 0 : 1");
+            }).toThrowError();
+        });
+    });
+
+    describe("generatePluralFormsFunction", function () {
+        it("generates function for English plural forms", function () {
+            var englishPluralForms = StoneTest.helpers.generatePluralFormsFunction("nplurals=2; plural=(n != 1);");
+            expect(englishPluralForms(0)).toEqual(1);
+            expect(englishPluralForms(1)).toEqual(0);
+            expect(englishPluralForms(2)).toEqual(1);
+        });
+
+        it("generates function for French plural forms", function () {
+            var frenchPluralForms = StoneTest.helpers.generatePluralFormsFunction("nplurals=2; plural=(n > 1);");
+            expect(frenchPluralForms(0)).toEqual(0);
+            expect(frenchPluralForms(1)).toEqual(0);
+            expect(frenchPluralForms(2)).toEqual(1);
+        });
+    });
 });

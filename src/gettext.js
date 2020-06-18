@@ -32,6 +32,7 @@ var helpers = require("./helpers.js");
 
 var catalogs = {};
 var locale_default = null;
+var pluralFormsFunctions = {};
 
 function gettext(string, replacements, locale_parameter) {
     var result = string;
@@ -55,25 +56,73 @@ function gettext(string, replacements, locale_parameter) {
     return result;
 }
 
-function LazyString(string, replacements, locale) {
-    this.toString = gettext.bind(this, string, replacements, locale);
+/**
+ * Usage:
+ * ```
+ * ngettext("{n} file removed", "{n} files removed", n)
+ * ngettext("{n} file removed", "{n} files removed", n, {n: n})
+ * ngettext("{count} file removed", "{count} files removed", n, {count: n})
+ * ```
+ * @param {string} string
+ * @param {string} stringPlural
+ * @param {number} number
+ * @param {Object} [replacements]
+ * @param {string} [locale_parameter]
+ */
+function ngettext(string, stringPlural, number, replacements, locale_parameter) {
+    var result = number === 1 ? string : stringPlural;
+    if (typeof replacements == "string") {
+        locale_parameter = replacements;
+        replacements = undefined;
+    }
+    var locale = locale_parameter || locale_default;
 
+    var messages;
+    var pluralForms;
+    if (locale && catalogs[locale] && catalogs[locale].messages) {
+        pluralForms = catalogs[locale]["plural-forms"];
+        messages = catalogs[locale].messages[string];
+    }
+    if (pluralForms && messages && messages.length > 0) {
+        if (!pluralFormsFunctions[locale]) {
+            pluralFormsFunctions[locale] = helpers.generatePluralFormsFunction(pluralForms);
+        }
+        var pluralIndex = pluralFormsFunctions[locale](number);
+        if (messages[pluralIndex] && messages[pluralIndex] !== "") {
+            result = messages[pluralIndex];
+        }
+    }
+
+    if (!replacements) {
+        replacements = {};
+    }
+    if (replacements.n === undefined) {
+        replacements.n = number;
+    }
+    for (var r in replacements) {
+        result = result.replace(new RegExp("\{" + r + "\}", "g"), replacements[r]);
+    }
+
+    return result;
+}
+
+function _copyStringPrototype(object) {
     var props = Object.getOwnPropertyNames(String.prototype);
     for (var i = 0 ; i < props.length ; i++) {
         if (props[i] == "toString") {
             continue;
         }
         if (typeof(String.prototype[props[i]]) == "function") {
-            this[props[i]] = function () {
+            object[props[i]] = function () {
                 var translatedString = this.self.toString();
                 return translatedString[this.prop].apply(translatedString, arguments);
-            }.bind({self: this, prop: props[i]});
+            }.bind({self: object, prop: props[i]});
         } else {
-            Object.defineProperty(this, props[i], {
+            Object.defineProperty(object, props[i], {
                 get: function () {
                     var translatedString = this.self.toString();
                     return translatedString[this.prop];
-                }.bind({self: this, prop: props[i]}),
+                }.bind({self: object, prop: props[i]}),
                 enumerable: false,
                 configurable: false
             });
@@ -81,8 +130,22 @@ function LazyString(string, replacements, locale) {
     }
 }
 
+function LazyString(string, replacements, locale) {
+    this.toString = gettext.bind(this, string, replacements, locale);
+    _copyStringPrototype(this);
+}
+
 function lazyGettext(string, replacements, locale) {
     return new LazyString(string, replacements, locale);
+}
+
+function LazyNString(string, stringPlural, number, replacements, locale) {
+    this.toString = ngettext.bind(this, string, stringPlural, number, replacements, locale);
+    _copyStringPrototype(this);
+}
+
+function lazyNgettext(string, stringPlural, number, replacements, locale) {
+    return new LazyNString(string, stringPlural, number, replacements, locale);
 }
 
 function clearCatalogs() {
@@ -131,6 +194,9 @@ module.exports = {
     LazyString: LazyString,
     gettext: gettext,
     lazyGettext: lazyGettext,
+    ngettext: ngettext,
+    lazyNgettext: lazyNgettext,
+    LazyNString: LazyNString,
     clearCatalogs: clearCatalogs,
     addCatalogs: addCatalogs,
     listCatalogs: listCatalogs,

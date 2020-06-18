@@ -15,7 +15,7 @@ Stone.js is a client-side gettext-like Javascript internationalization library t
 
 * replacement support inside translated strings
 
-* ~~plural forms support (ngettext/nLazyGettext)~~ **soon**
+* plural forms support (ngettext/lazyNgettext)
 
 * tools to extract/update/build translatable strings (see [stonejs-tools][])
 
@@ -221,6 +221,38 @@ Same as `Stone.gettext` but returns a `Stone.LazyString` instead of a `String`.
     String: Stone.lazyGettext( <string> [, locale] );
     String: Stone.lazyGettext( <string> [, replacements] [, locale] );
 
+### Stone.ngettext
+
+Translates the given strings to the current language with plural support.
+
+    String: Stone.ngettext( <string>, <stringPlural>, <number> [, locale] );
+    String: Stone.ngettext( <string>, <stringPlural>, <number> [, replacements] [, locale] );
+
+**params:**
+
+* `string`: The string to translate, in English singular form.
+* `stringPlural`: The string to translate, in English plural form.
+* `number`: The number that determines plural forms
+* `locale`: The locale string to use for translation (optional, default: current locale).
+* `replacements`: an object containing replacements for the string (optional, see example below).
+
+Note: 'n' is an implicit replacement for given number.
+
+**returns:**
+
+The translated string, in some plural form.
+
+**Examples:**
+
+```javascript
+var text1 = Stone.ngettext("one apple", "{nbApples} apples", 3, {nbApples: 3});
+var text2 = Stone.ngettext("{n} apple", "{n} apples", 3, {n: 3});
+var text3 = Stone.ngettext("{n} apple", "{n} apples", 3); // 'n' is an implicit replacement of given number
+```
+
+### Stone.lazyNgettext
+
+Same as `Stone.ngettext` but returns a `Stone.LazyNString` instead of a `String`.
 
 ### Stone.addCatalogs
 
@@ -370,6 +402,9 @@ You can find an example of its use in the PhotonUI documentation:
 
 * http://wanadev.github.io/PhotonUI/doc/widgets/translation.html
 
+### Stone.LazyNString (class)
+
+Same as `Stone.LazyString`, using `Stone.ngettext` for plural support.
 
 ### "stonejs-locale-changed" (event)
 

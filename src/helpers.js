@@ -225,9 +225,30 @@ function findBestMatchingLocale(locale, catalogs) {
     return "c";
 }
 
+function extractPluralExpression(pluralForms) {
+    var REGEX = /^\s*nplurals=\s*(\d+)\s*;\s*plural=([()n\s<>=\d&|%?!:+\-*\/]+);?[\s\\n]*$/g;
+    var result = REGEX.exec(pluralForms);
+    if (!result) {
+        throw new Error("plural forms are not valid");
+    }
+    return result[2];
+}
+
+function generatePluralFormsFunction(pluralForms) {
+    var pluralExpression = extractPluralExpression(pluralForms);
+    /* jshint -W061 */
+    var pluralFormsFunction = Function("n", "return " + pluralExpression);
+    /* jshint +W061 */
+    return function (n) {
+        return Number(pluralFormsFunction(n));
+    };
+}
+
 module.exports = {
     sendEvent: sendEvent,
     parseLanguageCode: parseLanguageCode,
     extractLanguages: extractLanguages,
-    findBestMatchingLocale: findBestMatchingLocale
+    findBestMatchingLocale: findBestMatchingLocale,
+    generatePluralFormsFunction: generatePluralFormsFunction,
+    extractPluralExpression: extractPluralExpression,
 };

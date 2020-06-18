@@ -461,6 +461,10 @@ This event is fired each time the locale changes (using the `Stone.setLocale` fu
 
 ## Changelog
 
+* **2.6.0:**
+   * Adds support of `ngettext()` for the JS API (thanks @jbghoul, #17)
+   * Adds support of `gettext_noop()` for the JS API (thanks @jbghoul, #19)
+
 * **2.5.0:**
    * Allow to override the local for a particular `gettext()` call (thanks @JochLAin, #13)
 

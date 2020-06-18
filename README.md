@@ -270,6 +270,32 @@ Adds one (or more if you merged multiple languages into one file) string catalog
 Stone.addCatalogs(catalogs);
 ```
 
+### Stone.gettext_noop
+
+Register a string to be translatable.
+Do not operate translation.
+Translation can be operated later with `Stone.gettext`.
+This can be useful in special cases where you want to register a string for translation,
+but want to keep a reference of the original string, in order to translate it later.
+
+    String: Stone.gettext_noop( <string> );
+
+**params:**
+
+* `string`: The string to register for translation
+
+**returns:**
+
+The exact same given string
+
+**Examples:**
+
+```javascript
+var translatable1 = Stone.gettext_noop("Some string to translate");
+var translatable2 = Stone.gettext_noop("Hello {name}");
+var text1 = Stone.gettext(translatable1);
+var text2 = Stone.gettext(translatable2, { name: "John" });
+```
 
 ### Stone.getLocale
 

@@ -225,7 +225,7 @@ function findBestMatchingLocale(locale, catalogs) {
     return "c";
 }
 
-function extractPluralForms(pluralForms) {
+function extractPluralExpression(pluralForms) {
     var REGEX = /^\s*nplurals=\s*(\d+)\s*;\s*plural=([()n\s<>=\d&|%?!:+\-*\/]+);?[\s\\n]*$/g;
     var result = REGEX.exec(pluralForms);
     if (!result) {
@@ -235,7 +235,7 @@ function extractPluralForms(pluralForms) {
 }
 
 function generatePluralFormsFunction(pluralForms) {
-    var pluralExpression = extractPluralForms(pluralForms);
+    var pluralExpression = extractPluralExpression(pluralForms);
     /* jshint -W061 */
     var pluralFormsFunction = Function("n", "return " + pluralExpression);
     /* jshint +W061 */
@@ -250,5 +250,5 @@ module.exports = {
     extractLanguages: extractLanguages,
     findBestMatchingLocale: findBestMatchingLocale,
     generatePluralFormsFunction: generatePluralFormsFunction,
-    extractPluralForms: extractPluralForms,
+    extractPluralExpression: extractPluralExpression,
 };

@@ -42,7 +42,7 @@ function gettext(string, replacements, locale_parameter) {
     }
     var locale = locale_parameter || locale_default;
 
-    if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string] &&
+    if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string] &&     // TODO if messages is an Object
         catalogs[locale].messages[string].length > 0 && catalogs[locale].messages[string][0] !== "") {
         result = catalogs[locale].messages[string][0];
     }
@@ -81,7 +81,7 @@ function ngettext(string, stringPlural, number, replacements, locale_parameter) 
     var pluralForms;
     if (locale && catalogs[locale] && catalogs[locale].messages) {
         pluralForms = catalogs[locale]["plural-forms"];
-        messages = catalogs[locale].messages[string];
+        messages = catalogs[locale].messages[string];   // TODO if messages is an Object
     }
     if (pluralForms && messages && messages.length > 0) {
         if (!pluralFormsFunctions[locale]) {
@@ -103,6 +103,18 @@ function ngettext(string, stringPlural, number, replacements, locale_parameter) 
         result = result.replace(new RegExp("\{" + r + "\}", "g"), replacements[r]);
     }
 
+    return result;
+}
+
+function pgettext(context, string, replacements, locale_parameter) {
+    var result = string;
+    // TODO
+    return result;
+}
+
+function npgettext(context, string, stringPlural, number, replacements, locale_parameter) {
+    var result = string;
+    // TODO
     return result;
 }
 
@@ -146,6 +158,24 @@ function LazyNString(string, stringPlural, number, replacements, locale) {
 
 function lazyNgettext(string, stringPlural, number, replacements, locale) {
     return new LazyNString(string, stringPlural, number, replacements, locale);
+}
+
+function LazyPString(context, string, replacements, locale) {
+    this.toString = pgettext.bind(this, context, string, replacements, locale);
+    _copyStringPrototype(this);
+}
+
+function lazyPgettext(context, string, replacements, locale) {
+    return new LazyPString(context, string, replacements, locale);
+}
+
+function LazyNPString(context, string, stringPlural, number, replacements, locale) {
+    this.toString = npgettext.bind(this, context, string, stringPlural, number, replacements, locale);
+    _copyStringPrototype(this);
+}
+
+function lazyNpgettext(context, string, stringPlural, number, replacements, locale) {
+    return new LazyNPString(context, string, stringPlural, number, replacements, locale);
 }
 
 /**
@@ -213,9 +243,15 @@ module.exports = {
     LazyString: LazyString,
     gettext: gettext,
     lazyGettext: lazyGettext,
+    LazyNString: LazyNString,
     ngettext: ngettext,
     lazyNgettext: lazyNgettext,
-    LazyNString: LazyNString,
+    LazyPString: LazyPString,
+    pgettext: pgettext,
+    lazyPgettext: lazyPgettext,
+    LazyNPString: LazyNPString,
+    npgettext: npgettext,
+    lazyNpgettext: lazyNpgettext,
     gettext_noop: gettext_noop,
     clearCatalogs: clearCatalogs,
     addCatalogs: addCatalogs,

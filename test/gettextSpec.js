@@ -249,7 +249,7 @@ describe("gettext", function () {
 
     });
 
-    describe("lazyGettext", function () {
+    describe("gettext_noop", function () {
 
         it("doest not operate translation", function () {
             var someString = "Some string to translate later";

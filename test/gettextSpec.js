@@ -128,7 +128,7 @@ describe("gettext", function () {
 
     describe("gettext", function () {
 
-        it("can translates strings", function () {
+        it("can translate strings", function () {
             StoneTest.index.setLocale(null);
             expect(StoneTest.index.gettext("Hello World")).toEqual("Hello World");
             StoneTest.index.setLocale("xx");
@@ -142,7 +142,22 @@ describe("gettext", function () {
             expect(StoneTest.index.gettext("Hello World", "fr")).toEqual("Bonjour le monde");
         });
 
-        it("can translates strings with replacements", function () {
+        it("can translate strings with default context", function () {
+            StoneTest.setLocale(null);
+            expect(StoneTest.index.gettext("File")).toEqual("File");
+            StoneTest.index.setLocale("xx");
+            expect(StoneTest.index.gettext("File")).toEqual("File");
+            StoneTest.index.setLocale("en");
+            expect(StoneTest.index.gettext("File")).toEqual("File");
+            StoneTest.index.setLocale("fr");
+            expect(StoneTest.index.gettext("File")).toEqual("Fichier");
+            StoneTest.index.setLocale("it");
+            expect(StoneTest.index.gettext("File")).toEqual("Filo");
+
+            expect(StoneTest.index.gettext("File", fr)).toEqual("Fichier");
+        });
+
+        it("can translate strings with replacements", function () {
             StoneTest.index.setLocale(null);
             expect(StoneTest.index.gettext("Hello {name}", {name: "John"})).toEqual("Hello John");
             StoneTest.index.setLocale("xx");
@@ -159,7 +174,8 @@ describe("gettext", function () {
     });
 
     describe("ngettext", function () {
-        it("can translates strings", function () {
+
+        it("can translate strings", function () {
             StoneTest.index.setLocale(null);
             expect(StoneTest.index.ngettext("horse", "horses", 0)).toEqual("horses");
             expect(StoneTest.index.ngettext("horse", "horses", 1)).toEqual("horse");
@@ -182,7 +198,7 @@ describe("gettext", function () {
             expect(StoneTest.index.ngettext("horse", "horses", 2)).toEqual("cavalli");
         });
 
-        it("can translates strings with replacements", function () {
+        it("can translate strings with replacements", function () {
             StoneTest.index.setLocale(null);
             expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 0, {n: 0})).toEqual("0 apples");
             expect(StoneTest.index.ngettext("{n} apple", "{n} apples", 1, {n: 1})).toEqual("1 apple");
@@ -231,7 +247,7 @@ describe("gettext", function () {
 
     describe("lazyGettext", function () {
 
-        it("can translates strings", function () {
+        it("can translate strings", function () {
             var s = StoneTest.index.lazyGettext("Hello World");
             StoneTest.index.setLocale(null);
             expect(String(s)).toEqual("Hello World");
@@ -239,7 +255,7 @@ describe("gettext", function () {
             expect(String(s)).toEqual("Bonjour le monde");
         });
 
-        it("can translates  strings with replacements", function () {
+        it("can translate strings with replacements", function () {
             var s = StoneTest.index.lazyGettext("Hello {name}", {name: "John"});
             StoneTest.index.setLocale(null);
             expect(String(s)).toEqual("Hello John");
@@ -330,7 +346,8 @@ describe("gettext", function () {
     });
 
     describe("pgettext", function () {
-        it("can traslate strings", function () {
+
+        it("can translate strings", function () {
             StoneTest.setLocale(null);
             expect(StoneTest.index.pgettext("back of an object", "Back")).toEqual("Back");
             expect(StoneTest.index.pgettext("going back/getting out", "Back")).toEqual("Back");
@@ -355,7 +372,7 @@ describe("gettext", function () {
             expect(StoneTest.index.pgettext("body spine", "Back", "fr")).toEqual("Back");
         });
 
-        it("can translates strings with replacements", function () {
+        it("can translate strings with replacements", function () {
             StoneTest.index.setLocale(null);
             expect(StoneTest.index.pgettext("imperative", "Go to {destination}", {destination: "Paris"})).toEqual("Go to Paris");
             expect(StoneTest.index.pgettext("infinitive", "Go to {destination}", {destination: "Checkout"})).toEqual("Go to Checkout");
@@ -377,12 +394,64 @@ describe("gettext", function () {
         });
     });
 
+    describe("lazyPgettext", function () {
+
+        it("can translate strings", function () {
+            var s = StoneTest.index.lazyPgettext("back of an object", "Back");
+            StoneTest.index.setLocale(null);
+            expect(String(s)).toEqual("Back");
+            StoneTest.index.setLocale("fr");
+            expect(String(s)).toEqual("Arrière");
+        });
+
+        it("can translate strings with replacements", function () {
+            var s = StoneTest.index.lazyPgettext("imperative", "Go to {destination}", {destination: "John's house"});
+            StoneTest.index.setLocale(null);
+            expect(String(s)).toEqual("Go to John's house");
+            StoneTest.index.setLocale("fr");
+            expect(String(s)).toEqual("Allez à John's house");
+        });
+
+    });
+
     describe("LazyPString", function () {
-        // TODO
+
+        beforeAll(function () {
+            StoneTest.index.setLocale("fr");
+        });
+
+        beforeEach(function () {
+            this.lazy = new StoneTest.index.LazyPString("Back");
+        });
+
+        it("can translate text", function () {
+            expect(this.lazy.toString()).toEqual("Arrière");
+        });
+
+        it("can mimic the String API", function () {
+            var stringProps = Object.getOwnPropertyNames(String.prototype);
+            var lazyProps = Object.getOwnPropertyNames(this.lazy);
+            for (var i = 0 ; i < stringProps.length ; i++) {
+                expect(lazyProps).toContain(stringProps[i]);
+            }
+        });
+
+        it("can give the translated string length", function () {
+            expect(this.lazy.length).toEqual("Arrière".length);
+        });
+
+        it("can return the translated string in lowerCase", function () {
+            expect(this.lazy.toLowerCase()).toEqual("arrière");
+        });
+
+        it("can return a splitted translated string", function () {
+            expect(this.lazy.split(" ")).toEqual(["Arrière"]);
+        });
     });
 
     describe("npgettext", function () {
-        it("can traslate strings with replacements", function () {
+
+        it("can translate strings with replacements", function () {
             StoneTest.setLocale(null);
             expect(StoneTest.index.npgettext("musical instrument", "{n} string", "{n} strings", 0, {n: 0})).toEqual("0 strings");
             expect(StoneTest.index.npgettext("musical instrument", "{n} string", "{n} strings", 1, {n: 1})).toEqual("1 string");
@@ -423,36 +492,94 @@ describe("gettext", function () {
             expect(StoneTest.index.npgettext("musical instrument", "{n} string", "{n} strings", 1, {n: 1}, "fr")).toEqual("1 instrument à cordes");
             expect(StoneTest.index.npgettext("musical instrument", "{n} string", "{n} strings", 2, {n: 2}, "fr")).toEqual("2 instruments à cordes");
 
-            // TODO context does not match
+            // implicit number
+            expect(StoneTest.index.npgettext("musical instrument", "{n} string", "{n} strings", 0, "fr")).toEqual("0 instrument à cordes");
+
+            // context does not match
             StoneTest.setLocale(null);
-            expect(StoneTest.index.npgettext("body spine", "Back")).toEqual("Back");
-            expect(StoneTest.index.npgettext("body spine", "Back", "fr")).toEqual("Back");
+            expect(StoneTest.index.npgettext("tool made of lots of textile filaments", "{n} string", "{n} strings", 0, {n: 0})).toEqual("0 strings");
+            expect(StoneTest.index.npgettext("tool made of lots of textile filaments", "{n} string", "{n} strings", 0, {n: 0}, "fr")).toEqual("0 strings");
         });
 
-        it("can translates strings", function () { // TODO
+        it("can translate strings", function () {
             StoneTest.index.setLocale(null);
-            expect(StoneTest.index.npgettext("imperative", "Go to {destination}", {destination: "Paris"})).toEqual("His name is John");
-            expect(StoneTest.index.npgettext("infinitive", "Go to {destination}", {name: "Jenna"})).toEqual("Go to Checkout");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 0)).toEqual("Files");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 1)).toEqual("File");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 2)).toEqual("Files");
             StoneTest.index.setLocale("xx");
-            expect(StoneTest.index.npgettext("imperative", "Go to {destination}", {destination: "Paris"})).toEqual("His name is John");
-            expect(StoneTest.index.npgettext("infinitive", "Go to {destination}", {name: "Jenna"})).toEqual("Go to Checkout");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 0)).toEqual("Files");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 1)).toEqual("File");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 2)).toEqual("Files");
             StoneTest.index.setLocale("en");
-            expect(StoneTest.index.npgettext("imperative", "Go to {destination}", {destination: "Paris"})).toEqual("His name is John");
-            expect(StoneTest.index.npgettext("infinitive", "Go to {destination}", {name: "Jenna"})).toEqual("Go to Checkout");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 0)).toEqual("Files");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 1)).toEqual("File");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 2)).toEqual("Files");
             StoneTest.index.setLocale("fr");
-            expect(StoneTest.index.npgettext("imperative", "Go to {destination}", {destination: "Paris"})).toEqual("Allez à Paris");
-            expect(StoneTest.index.npgettext("infinitive", "Go to {destination}", {name: "Jenna"})).toEqual("Allez à l'interface de paiement");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 0)).toEqual("Fichier");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 1)).toEqual("Fichier");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 2)).toEqual("Fichiers");
             StoneTest.index.setLocale("it");
-            expect(StoneTest.index.npgettext("imperative", "Go to {destination}", {destination: "Paris"})).toEqual("Vai a Paris");
-            expect(StoneTest.index.npgettext("infinitive", "Go to {destination}", {name: "Jenna"})).toEqual("Andare alla pagina di pagamento");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 0)).toEqual("File");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 1)).toEqual("Filo");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 2)).toEqual("File");
 
-            expect(StoneTest.index.npgettext("imperative", "Go to {destination}", {destination: "Paris"}, "fr")).toEqual("Allez à Paris");
-            expect(StoneTest.index.npgettext("infinitive", "Go to {destination}", {name: "Jenna"}, "fr")).toEqual("Allez à l'interface de paiement");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 0, fr)).toEqual("Fichier");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 1, fr)).toEqual("Fichier");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 2, fr)).toEqual("Fichiers");
+        });
+    });
+
+    describe("lazyNpgettext", function () {
+
+        it("can translate strings", function () {
+            var s = StoneTest.index.lazyNpgettext("computer file", "File", "Files", 1);
+            StoneTest.index.setLocale(null);
+            expect(String(s)).toEqual("File");
+            StoneTest.index.setLocale("fr");
+            expect(String(s)).toEqual("Fichier");
+        });
+
+        it("can translate strings with replacements", function () {
+            var s = StoneTest.index.lazyNpgettext("musical instrument", "{n} string", "{n} strings", 0);
+            StoneTest.index.setLocale(null);
+            expect(String(s)).toEqual("0 strings");
+            StoneTest.index.setLocale("fr");
+            expect(String(s)).toEqual("0 instrument à cordes");
         });
     });
 
     describe("LazyNPString", function () {
-        // TODO
+        beforeAll(function () {
+            StoneTest.index.setLocale("fr");
+        });
+
+        beforeEach(function () {
+            this.lazy = new StoneTest.index.LazyNPString("musical instrument", "{n} string", "{n} strings", 2);
+        });
+
+        it("can translate text", function () {
+            expect(this.lazy.toString()).toEqual("2 instruments à cordes");
+        });
+
+        it("can mimic the String API", function () {
+            var stringProps = Object.getOwnPropertyNames(String.prototype);
+            var lazyProps = Object.getOwnPropertyNames(this.lazy);
+            for (var i = 0 ; i < stringProps.length ; i++) {
+                expect(lazyProps).toContain(stringProps[i]);
+            }
+        });
+
+        it("can give the translated string length", function () {
+            expect(this.lazy.length).toEqual("2 instruments à cordes".length);
+        });
+
+        it("can return the translated string in upperCase", function () {
+            expect(this.lazy.toUpperCase()).toEqual("2 INSTRUMENTS À CORDES");
+        });
+
+        it("can return a splitted translated string", function () {
+            expect(this.lazy.split(" ")).toEqual(["2", "instruments", "à", "cordes"]);
+        });
     });
 
     describe("catalogs", function () {

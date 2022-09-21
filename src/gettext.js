@@ -42,9 +42,14 @@ function gettext(string, replacements, locale_parameter) {
     }
     var locale = locale_parameter || locale_default;
 
-    if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string] &&     // TODO if messages is an Object
-        catalogs[locale].messages[string].length > 0 && catalogs[locale].messages[string][0] !== "") {
-        result = catalogs[locale].messages[string][0];
+    if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string]) {
+        var messages = catalogs[locale].messages[string];
+        if (messages instanceof Array && messages.length > 0 && messages[0] !== "") {
+            result = messages[0];
+        }
+        if (messages["*"] && messages["*"][0] !== "") {
+            result = messages["*"][0];
+        }
     }
 
     if (replacements) {
@@ -81,15 +86,23 @@ function ngettext(string, stringPlural, number, replacements, locale_parameter) 
     var pluralForms;
     if (locale && catalogs[locale] && catalogs[locale].messages) {
         pluralForms = catalogs[locale]["plural-forms"];
-        messages = catalogs[locale].messages[string];   // TODO if messages is an Object
+        messages = catalogs[locale].messages[string];
     }
-    if (pluralForms && messages && messages.length > 0) {
+    if (pluralForms && messages) {
         if (!pluralFormsFunctions[locale]) {
             pluralFormsFunctions[locale] = helpers.generatePluralFormsFunction(pluralForms);
         }
-        var pluralIndex = pluralFormsFunctions[locale](number);
-        if (messages[pluralIndex] && messages[pluralIndex] !== "") {
-            result = messages[pluralIndex];
+        if (messages instanceof Array && messages.length > 0) {
+            var pluralIndex = pluralFormsFunctions[locale](number);
+            if (messages[pluralIndex] && messages[pluralIndex] !== "") {
+                result = messages[pluralIndex];
+            }
+        }
+        if (messages["*"]) {
+            var pluralIndex = pluralFormsFunctions[locale](number);
+            if (messages["*"][pluralIndex] && messages["*"][pluralIndex] !== "") {
+                result = messages["*"][pluralIndex];
+            }
         }
     }
 
@@ -108,13 +121,64 @@ function ngettext(string, stringPlural, number, replacements, locale_parameter) 
 
 function pgettext(context, string, replacements, locale_parameter) {
     var result = string;
-    // TODO
+    if (typeof replacements == "string") {
+        locale_parameter = replacements;
+        replacements = undefined;
+    }
+    var locale = locale_parameter || locale_default;
+
+    if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string]) {
+        var messages = catalogs[locale].messages[string];
+        if (messages[context] && messages[context][0] !== "") {
+            result = messages[context][0];
+        }
+    }
+
+    if (replacements) {
+        for (var r in replacements) {
+            result = result.replace(new RegExp("\{" + r + "\}", "g"), replacements[r]);
+        }
+    }
+
     return result;
 }
 
 function npgettext(context, string, stringPlural, number, replacements, locale_parameter) {
-    var result = string;
-    // TODO
+    var result = number === 1 ? string : stringPlural;
+    if (typeof replacements == "string") {
+        locale_parameter = replacements;
+        replacements = undefined;
+    }
+    var locale = locale_parameter || locale_default;
+
+    var messages;
+    var pluralForms;
+    if (locale && catalogs[locale] && catalogs[locale].messages) {
+        pluralForms = catalogs[locale]["plural-forms"];
+        messages = catalogs[locale].messages[string];
+    }
+    if (pluralForms && messages) {
+        if (!pluralFormsFunctions[locale]) {
+            pluralFormsFunctions[locale] = helpers.generatePluralFormsFunction(pluralForms);
+        }
+        if (messages[context]) {
+            var pluralIndex = pluralFormsFunctions[locale](number);
+            if (messages[context][pluralIndex] && messages[context][pluralIndex] !== "") {
+                result = messages[context][pluralIndex];
+            }
+        }
+    }
+
+    if (!replacements) {
+        replacements = {};
+    }
+    if (replacements.n === undefined) {
+        replacements.n = number;
+    }
+    for (var r in replacements) {
+        result = result.replace(new RegExp("\{" + r + "\}", "g"), replacements[r]);
+    }
+
     return result;
 }
 

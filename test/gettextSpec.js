@@ -154,7 +154,7 @@ describe("gettext", function () {
             StoneTest.index.setLocale("it");
             expect(StoneTest.index.gettext("File")).toEqual("Filo");
 
-            expect(StoneTest.index.gettext("File", fr)).toEqual("Fichier");
+            expect(StoneTest.index.gettext("File", "fr")).toEqual("Fichier");
         });
 
         it("can translate strings with replacements", function () {
@@ -523,9 +523,9 @@ describe("gettext", function () {
             expect(StoneTest.index.npgettext("computer file", "File", "Files", 1)).toEqual("Filo");
             expect(StoneTest.index.npgettext("computer file", "File", "Files", 2)).toEqual("File");
 
-            expect(StoneTest.index.npgettext("computer file", "File", "Files", 0, fr)).toEqual("Fichier");
-            expect(StoneTest.index.npgettext("computer file", "File", "Files", 1, fr)).toEqual("Fichier");
-            expect(StoneTest.index.npgettext("computer file", "File", "Files", 2, fr)).toEqual("Fichiers");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 0, "fr")).toEqual("Fichier");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 1, "fr")).toEqual("Fichier");
+            expect(StoneTest.index.npgettext("computer file", "File", "Files", 2, "fr")).toEqual("Fichiers");
         });
     });
 

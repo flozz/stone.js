@@ -22,6 +22,8 @@ var CATALOGS = {
                 "computer file": ["File", "Files"],
                 "*": [""],
             },
+            "car": { "*": ["car", "cars"] },
+            "Welcome back, {name}!": { "*": [""]}
         }
     },
     fr: {
@@ -47,6 +49,8 @@ var CATALOGS = {
                 "computer file": ["Fichier", "Fichiers"],
                 "*": ["Fichier"],
             },
+            "car": { "*": ["voiture", "voitures"] },
+            "Welcome back, {name}!": { "*": ["Heureux de vous revoir, {name}!"]}
         }
     },
     it: {
@@ -72,6 +76,8 @@ var CATALOGS = {
                 "computer file": ["Filo", "File"],
                 "*": ["Filo"],
             },
+            "car": { "*": ["macchina", "macchine"] },
+            "Welcome back, {name}!": { "*": ["Bentornato, {name}!"]}
         }
     }
 };

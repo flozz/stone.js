@@ -52,9 +52,19 @@ module.exports = {
     LazyString: gettext.LazyString,
     gettext: gettext.gettext,
     lazyGettext: gettext.lazyGettext,
+
+    LazyNString: gettext.LazyNString,
     ngettext: gettext.ngettext,
     lazyNgettext: gettext.lazyNgettext,
-    LazyNString: gettext.LazyNString,
+
+    LazyPString: gettext.LazyPString,
+    pgettext: gettext.pgettext,
+    lazyPgettext: gettext.lazyPgettext,
+
+    LazyNPString: gettext.LazyNPString,
+    npgettext: gettext.npgettext,
+    lazyNpgettext: gettext.lazyNpgettext,
+
     gettext_noop: gettext.gettext_noop,
     clearCatalogs: gettext.clearCatalogs,
     addCatalogs: gettext.addCatalogs,

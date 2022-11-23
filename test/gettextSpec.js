@@ -171,7 +171,7 @@ describe("gettext", function () {
         describe("With context compatible catalog format", function () {
 
             it("can translate strings", function () {
-                StoneTest.setLocale(null);
+                StoneTest.index.setLocale(null);
                 expect(StoneTest.index.gettext("File")).toEqual("File");
                 StoneTest.index.setLocale("xx");
                 expect(StoneTest.index.gettext("File")).toEqual("File");
@@ -403,7 +403,7 @@ describe("gettext", function () {
     describe("pgettext", function () {
 
         it("can translate strings", function () {
-            StoneTest.setLocale(null);
+            StoneTest.index.setLocale(null);
             expect(StoneTest.index.pgettext("back of an object", "Back")).toEqual("Back");
             expect(StoneTest.index.pgettext("going back/getting out", "Back")).toEqual("Back");
             StoneTest.index.setLocale("xx");
@@ -422,7 +422,7 @@ describe("gettext", function () {
             expect(StoneTest.index.pgettext("back of an object", "Back", "fr")).toEqual("Arrière");
 
             // context does not match
-            StoneTest.setLocale(null);
+            StoneTest.index.setLocale(null);
             expect(StoneTest.index.pgettext("body spine", "Back")).toEqual("Back");
             expect(StoneTest.index.pgettext("body spine", "Back", "fr")).toEqual("Back");
         });
@@ -450,7 +450,7 @@ describe("gettext", function () {
                 "infinitive",
                 "Go to {destination}",
                 {destination: "l'interface de paiement"}
-            )).toEqual("Allez à l'interface de paiement");
+            )).toEqual("Aller à l'interface de paiement");
             StoneTest.index.setLocale("it");
             expect(StoneTest.index.pgettext("imperative", "Go to {destination}", {destination: "Paris"}))
                 .toEqual("Vai a Paris");
@@ -467,7 +467,7 @@ describe("gettext", function () {
                 "Go to {destination}",
                 {destination: "l'interface de paiement"},
                 "fr"
-            )).toEqual("Allez à l'interface de paiement");
+            )).toEqual("Aller à l'interface de paiement");
         });
     });
 
@@ -498,7 +498,7 @@ describe("gettext", function () {
         });
 
         beforeEach(function () {
-            this.lazy = new StoneTest.index.LazyPString("Back");
+            this.lazy = new StoneTest.index.LazyPString("back of an object", "Back");
         });
 
         it("can translate text", function () {
@@ -529,7 +529,7 @@ describe("gettext", function () {
     describe("npgettext", function () {
 
         it("can translate strings with replacements", function () {
-            StoneTest.setLocale(null);
+            StoneTest.index.setLocale(null);
             expect(StoneTest.index.npgettext("musical instrument", "{n} string", "{n} strings", 0, {n: 0}))
                 .toEqual("0 strings");
             expect(StoneTest.index.npgettext("musical instrument", "{n} string", "{n} strings", 1, {n: 1}))
@@ -607,7 +607,7 @@ describe("gettext", function () {
                 .toEqual("0 instrument à cordes");
 
             // context does not match
-            StoneTest.setLocale(null);
+            StoneTest.index.setLocale(null);
             expect(StoneTest.index.npgettext(
                 "tool made of lots of textile filaments",
                 "{n} string",

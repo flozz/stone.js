@@ -92,18 +92,17 @@ function ngettext(string, stringPlural, number, replacements, locale_parameter) 
         if (!pluralFormsFunctions[locale]) {
             pluralFormsFunctions[locale] = helpers.generatePluralFormsFunction(pluralForms);
         }
-        var pluralIndex;
+
+        var pluralIndex = pluralFormsFunctions[locale](number);
+        var message;
         if (Array.isArray(messages) && messages.length > 0) {
-            pluralIndex = pluralFormsFunctions[locale](number);
-            if (messages[pluralIndex] && messages[pluralIndex] !== "") {
-                result = messages[pluralIndex];
-            }
+            message = messages;
         }
         if (Array.isArray(messages["*"]) && messages["*"].length > 0) {
-            pluralIndex = pluralFormsFunctions[locale](number);
-            if (messages["*"][pluralIndex] && messages["*"][pluralIndex] !== "") {
-                result = messages["*"][pluralIndex];
-            }
+            message = messages["*"];
+        }
+        if (message[pluralIndex] && message[pluralIndex] !== "") {
+            result = message[pluralIndex];
         }
     }
 

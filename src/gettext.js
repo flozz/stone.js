@@ -44,10 +44,10 @@ function gettext(string, replacements, locale_parameter) {
 
     if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string]) {
         var messages = catalogs[locale].messages[string];
-        if (messages instanceof Array && messages.length > 0 && messages[0] !== "") {
+        if (Array.isArray(messages) && messages.length > 0 && messages[0] !== "") {
             result = messages[0];
         }
-        if (messages["*"] instanceof Array && messages["*"].length > 0 && messages["*"][0] !== "") {
+        if (Array.isArray(messages["*"]) && messages["*"].length > 0 && messages["*"][0] !== "") {
             result = messages["*"][0];
         }
     }
@@ -93,13 +93,13 @@ function ngettext(string, stringPlural, number, replacements, locale_parameter) 
             pluralFormsFunctions[locale] = helpers.generatePluralFormsFunction(pluralForms);
         }
         var pluralIndex;
-        if (messages instanceof Array && messages.length > 0) {
+        if (Array.isArray(messages) && messages.length > 0) {
             pluralIndex = pluralFormsFunctions[locale](number);
             if (messages[pluralIndex] && messages[pluralIndex] !== "") {
                 result = messages[pluralIndex];
             }
         }
-        if (messages["*"] instanceof Array && messages["*"].length > 0) {
+        if (Array.isArray(messages["*"]) && messages["*"].length > 0) {
             pluralIndex = pluralFormsFunctions[locale](number);
             if (messages["*"][pluralIndex] && messages["*"][pluralIndex] !== "") {
                 result = messages["*"][pluralIndex];
@@ -130,7 +130,7 @@ function pgettext(context, string, replacements, locale_parameter) {
 
     if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string]) {
         var messages = catalogs[locale].messages[string];
-        if (messages[context] instanceof Array && messages[context].length > 0 && messages[context][0] !== "") {
+        if (Array.isArray(messages[context]) && messages[context].length > 0 && messages[context][0] !== "") {
             result = messages[context][0];
         }
     }
@@ -162,7 +162,7 @@ function npgettext(context, string, stringPlural, number, replacements, locale_p
         if (!pluralFormsFunctions[locale]) {
             pluralFormsFunctions[locale] = helpers.generatePluralFormsFunction(pluralForms);
         }
-        if (messages[context] instanceof Array && messages[context].length > 0) {
+        if (Array.isArray(messages[context]) && messages[context].length > 0) {
             var pluralIndex = pluralFormsFunctions[locale](number);
             if (messages[context][pluralIndex] && messages[context][pluralIndex] !== "") {
                 result = messages[context][pluralIndex];

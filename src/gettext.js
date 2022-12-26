@@ -88,7 +88,7 @@ function ngettext(string, stringPlural, number, replacements, locale_parameter) 
         pluralForms = catalogs[locale]["plural-forms"];
         messages = catalogs[locale].messages[string];
     }
-    if (pluralForms && messages) {
+    if (pluralForms !== undefined && messages !== undefined) {
         if (!pluralFormsFunctions[locale]) {
             pluralFormsFunctions[locale] = helpers.generatePluralFormsFunction(pluralForms);
         }
@@ -101,7 +101,7 @@ function ngettext(string, stringPlural, number, replacements, locale_parameter) 
         if (Array.isArray(messages["*"]) && messages["*"].length > 0) {
             message = messages["*"];
         }
-        if (message[pluralIndex] && message[pluralIndex] !== "") {
+        if (message[pluralIndex] !== undefined && message[pluralIndex] !== "") {
             result = message[pluralIndex];
         }
     }

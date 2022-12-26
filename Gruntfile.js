@@ -15,17 +15,6 @@ module.exports = function(grunt) {
                     }
                 }
             },
-
-            test: {
-                files: {
-                  "test/<%= pkg.name %>.test.js": ["src/tests.js"],
-                },
-                options: {
-                    browserifyOptions: {
-                        "standalone": "StoneTest"
-                    }
-                }
-            }
         },
 
         uglify: {
@@ -47,7 +36,7 @@ module.exports = function(grunt) {
             },
             tests: {
                 files: {
-                    src: ["test/*Spec.js"]
+                    src: ["test/*.js"]
                 }
             },
             options: {
@@ -62,13 +51,10 @@ module.exports = function(grunt) {
             }
         },
 
-        jasmine: {
-            pivotal: {
-                src: "test/*.test.js",
-                options: {
-                    helpers: ["test/data.js", "test/helpers.js"],
-                    specs: "test/*Spec.js"
-                }
+        run: {
+            jest: {
+                cmd: "jest",
+                args: ["--coverage"]
             }
         }
 
@@ -77,12 +63,12 @@ module.exports = function(grunt) {
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks("grunt-browserify");
     grunt.loadNpmTasks("grunt-contrib-uglify");
-    grunt.loadNpmTasks("grunt-contrib-jasmine");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-jscs");
+    grunt.loadNpmTasks("grunt-run");
 
     // Default task(s).
     grunt.registerTask("default", ["browserify:dist", "uglify"]);
-    grunt.registerTask("test", ["browserify:test", "jshint", "jscs", "jasmine"]);
+    grunt.registerTask("test", ["jshint", "jscs", "run:jest"]);
 
 };

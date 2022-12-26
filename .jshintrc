@@ -15,9 +15,6 @@
   "loopfunc": false,
   "jasmine": true,
   "globals": {
-    "StoneTest": false,
-    "CATALOGS": false,
-    "_sendEvent": false,
-    "_addHtml": false
+      "jest": true
   }
 }

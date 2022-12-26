@@ -1,4 +1,4 @@
-function _sendEvent(name, data) {
+function sendEvent(name, data) {
     data = data || {};
     var ev = null;
     try {
@@ -14,7 +14,7 @@ function _sendEvent(name, data) {
     document.dispatchEvent(ev);
 }
 
-function _addHtml() {
+function addHtml() {
     var _html = "<br />Translatable DOM:";
     _html += "<ul>";
     _html += "    <li stonejs id=\"translatable-1\">Hello World</li>";
@@ -28,3 +28,8 @@ function _addHtml() {
 
     document.getElementsByTagName("body")[0].innerHTML += _html;
 }
+
+module.exports = {
+    sendEvent: sendEvent,
+    addHtml: addHtml,
+};

@@ -46,8 +46,7 @@ function gettext(string, replacements, locale_parameter) {
         var messages = catalogs[locale].messages[string];
         if (Array.isArray(messages) && messages.length > 0 && messages[0] !== "") {
             result = messages[0];
-        }
-        else if (Array.isArray(messages["*"]) && messages["*"].length > 0 && messages["*"][0] !== "") {
+        } else if (Array.isArray(messages["*"]) && messages["*"].length > 0 && messages["*"][0] !== "") {
             result = messages["*"][0];
         }
     }
@@ -97,8 +96,7 @@ function ngettext(string, stringPlural, number, replacements, locale_parameter) 
         var message;
         if (Array.isArray(messages) && messages.length > 0) {
             message = messages;
-        }
-        else if (Array.isArray(messages["*"]) && messages["*"].length > 0) {
+        } else if (Array.isArray(messages["*"]) && messages["*"].length > 0) {
             message = messages["*"];
         }
         if (message[pluralIndex] !== undefined && message[pluralIndex] !== "") {

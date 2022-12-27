@@ -567,7 +567,13 @@ Want to support this project?
 
 * **[NEXT]** (changes on `master` but not released yet):
 
-  * Added support of string with context (`pgettext`, `npgettext`,...) (@Krenodeno, #33)
+  * Nothing yet ;)
+
+* **v2.7.0:**
+
+  * Added support of string with context (`pgettext`, `npgettext`,...) (@Krenodeno, #33, #40)
+  * Updated dependencies
+  * Dev: tests are now using Jest instead of Jasmine, and Github Actions replaces Travis
 
 * **v2.6.0:**
 

@@ -258,15 +258,14 @@ Same as `Stone.ngettext` but returns a `Stone.LazyNString` instead of a `String`
 
 ### Stone.pgettext
 
-Translates the given string to the current language using a context argument, helping with string that could be the same in the C
-language but could mean different things in other languages.
+Translates the given string to the current language using a context argument to solve ambiguities ([read more](https://www.gnu.org/software/gettext/manual/gettext.html#Using-contexts-for-solving-ambiguities)).
 
     String: Stone.pgettext( <context>, <string> [, locale] );
     String: Stone.pgettext( <context>, <string> [, replacements] [, locale] );
 
 **params:**
 
-* `context`: The string context.
+* `context`: The context of the string.
 * `string`: The string to translate.
 * `locale`: The locale string to use for translation (optional, default: current locale).
 * `replacements`: an object containing replacements for the string (optional, see example below).
@@ -284,19 +283,19 @@ var text1 = Stone.pgettext("back of an object", "Back", "it");
 
 ### Stone.lazyPgettext
 
-Same as `Stone.pgettext` but returns a `Stone.lazyPString` instead of a `String`.
+Same as `Stone.pgettext` but returns a `Stone.LazyPString` instead of a `String`.
 
 
 ### Stone.npgettext
 
-Translates the given strings to the current language with plural support and using a context argument.
+Translates the given strings to the current language with plural support and using a context argument to solve ambiguities ([read more](https://www.gnu.org/software/gettext/manual/gettext.html#Using-contexts-for-solving-ambiguities)).
 
     String: Stone.npgettext( <context>, <string>, <stringPlural>, <number> [, locale] );
     String: Stone.npgettext( <context>, <string>, <stringPlural>, <number> [, replacements] [, locale] );
 
 **params:**
 
-* `context`: The string context.
+* `context`: The context of the string.
 * `string`: The string to translate, in English singular form.
 * `stringPlural`: The string to translate, in English plural form.
 * `number`: The number that determines plural forms
@@ -320,7 +319,7 @@ var text3 = Stone.npgettext("fruit", "{n} apple", "{n} apples", 3); // 'n' is an
 
 ### Stone.lazyNpgettext
 
-Same as `Stone.npgettext` but returns a `Stone.lazyNPString` instead of a `String`.
+Same as `Stone.npgettext` but returns a `Stone.LazyNPString` instead of a `String`.
 
 
 ### Stone.addCatalogs

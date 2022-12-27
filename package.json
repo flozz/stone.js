@@ -16,7 +16,7 @@
     "jscs-preset-loris": "^1.2.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt lint test"
   },
   "repository": {
     "type": "git",

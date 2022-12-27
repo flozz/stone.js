@@ -69,6 +69,7 @@ module.exports = function(grunt) {
 
     // Default task(s).
     grunt.registerTask("default", ["browserify:dist", "uglify"]);
-    grunt.registerTask("test", ["jshint", "jscs", "run:jest"]);
+    grunt.registerTask("lint", ["jshint", "jscs"]);
+    grunt.registerTask("test", ["run:jest"]);
 
 };

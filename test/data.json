@@ -61,20 +61,20 @@
             "horse": ["cavallo", "cavalli"],
             "{n} apple": ["{n} mela", "{n} mele"],
             "Back": {
-                "back of an object": ["Posteriore"],
-                "going back/getting out": ["Andare"]
+                "back of an object": ["Retro"],
+                "going back/getting out": ["Indietro"]
             },
             "Go to {destination}": {
                 "imperative": ["Vai a {destination}"],
-                "infinitive": ["Andare {destination}"]
+                "infinitive": ["Andare a {destination}"]
             },
             "{n} string": {
                 "musical instrument": ["{n} strumento a corda", "{n} strumenti a corda"],
                 "computer variable": ["{n} stringa", "{n} stringhe"]
             },
             "File": {
-                "computer file": ["Filo", "File"],
-                "*": ["Filo"]
+                "computer file": ["File", "File"],
+                "*": ["File"]
             },
             "car": { "*": ["macchina", "macchine"] },
             "Welcome back, {name}!": { "*": ["Bentornato, {name}!"]}

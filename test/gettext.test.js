@@ -183,7 +183,7 @@ describe("gettext", function () {
                 stonejs.setLocale("fr");
                 expect(stonejs.gettext("File")).toEqual("Fichier");
                 stonejs.setLocale("it");
-                expect(stonejs.gettext("File")).toEqual("Filo");
+                expect(stonejs.gettext("File")).toEqual("File");
 
                 expect(stonejs.gettext("File", "fr")).toEqual("Fichier");
             });
@@ -419,8 +419,8 @@ describe("gettext", function () {
             expect(stonejs.pgettext("back of an object", "Back")).toEqual("Arrière");
             expect(stonejs.pgettext("going back/getting out", "Back")).toEqual("Retour");
             stonejs.setLocale("it");
-            expect(stonejs.pgettext("back of an object", "Back")).toEqual("Posteriore");
-            expect(stonejs.pgettext("going back/getting out", "Back")).toEqual("Andare");
+            expect(stonejs.pgettext("back of an object", "Back")).toEqual("Retro");
+            expect(stonejs.pgettext("going back/getting out", "Back")).toEqual("Indietro");
 
             expect(stonejs.pgettext("back of an object", "Back", "fr")).toEqual("Arrière");
 
@@ -460,8 +460,8 @@ describe("gettext", function () {
             expect(stonejs.pgettext(
                 "infinitive",
                 "Go to {destination}",
-                {destination: "alla pagina di pagamento"}
-            )).toEqual("Andare alla pagina di pagamento");
+                {destination: "pagina di pagamento"}
+            )).toEqual("Andare a pagina di pagamento");
 
             expect(stonejs.pgettext("imperative", "Go to {destination}", {destination: "Paris"}, "fr"))
                 .toEqual("Allez à Paris");
@@ -647,7 +647,7 @@ describe("gettext", function () {
             expect(stonejs.npgettext("computer file", "File", "Files", 2)).toEqual("Fichiers");
             stonejs.setLocale("it");
             expect(stonejs.npgettext("computer file", "File", "Files", 0)).toEqual("File");
-            expect(stonejs.npgettext("computer file", "File", "Files", 1)).toEqual("Filo");
+            expect(stonejs.npgettext("computer file", "File", "Files", 1)).toEqual("File");
             expect(stonejs.npgettext("computer file", "File", "Files", 2)).toEqual("File");
 
             expect(stonejs.npgettext("computer file", "File", "Files", 0, "fr")).toEqual("Fichier");

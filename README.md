@@ -268,7 +268,7 @@ Translates the given string to the current language using a context argument to 
 * `context`: The context of the string.
 * `string`: The string to translate.
 * `locale`: The locale string to use for translation (optional, default: current locale).
-* `replacements`: an object containing replacements for the string (optional, see example below).
+* `replacements`: an object containing replacements for the string (optional).
 
 **returns:**
 

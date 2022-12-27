@@ -461,31 +461,41 @@ This event is fired each time the locale changes (using the `Stone.setLocale` fu
 
 ## Changelog
 
-* **2.6.0:**
-   * Adds support of `ngettext()` for the JS API (thanks @jbghoul, #17)
-   * Adds support of `gettext_noop()` for the JS API (thanks @jbghoul, #19)
+* **[NEXT]** (changes on `master` but not released yet):
 
-* **2.5.0:**
-   * Allow to override the local for a particular `gettext()` call (thanks @JochLAin, #13)
+  * Added support of string with context (`pgettext`, `npgettext`,...) (@Krenodeno, #33)
 
-* **2.4.0:**
-    * Adds the `listCatalogs` methods to list available catalogs (thanks @BobRazowsky, #12)
+* **v2.6.0:**
 
-* **2.3.0**:
-    * The `addCatalog` function now merge catalogs.
+  * Added support of `ngettext()` for the JS API (thanks @jbghoul, #17)
+  * Added support of `gettext_noop()` for the JS API (thanks @jbghoul, #19)
 
-* **2.2.0**:
-    * New function to find the best matching catalog from given locales and catalogs (`findBestMatchingLocale`)
+* **v2.5.0:**
 
-* **2.1.0**:
-    * Better language code handling (now support locales with dialect like fr_FR, fr_CA,...)
-    * New function to select the best catalog from a language list (`setBestMatchingLocale`)
+  * Allow to override the local for a particular `gettext()` call (thanks @JochLAin, #13)
 
-* **2.0.0**:
-    * new javascript tools to replace the old pythonic ones
-    * new file format (incompatible with the previous version!) to be ready for plural forms (ngettext) support
-    * new documentation
+* **v2.4.0:**
 
+  * Added the `listCatalogs` methods to list available catalogs (thanks @BobRazowsky, #12)
+
+* **v2.3.0**:
+
+  * The `addCatalog` function now merge catalogs.
+
+* **v2.2.0**:
+
+  * New function to find the best matching catalog from given locales and catalogs (`findBestMatchingLocale`)
+
+* **v2.1.0**:
+
+  * Better language code handling (now support locales with dialect like `fr_FR`, `fr_CA`,...)
+  * New function to select the best catalog from a language list (`setBestMatchingLocale`)
+
+* **v2.0.0**:
+
+  * New javascript tools to replace the old pythonic ones
+  * New file format (incompatible with the previous version!) to be ready for plural forms (ngettext) support
+  * New documentation
 
 
 [stonejs-tools]: https://github.com/flozz/stonejs-tools

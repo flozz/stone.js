@@ -1,8 +1,10 @@
-dist
-node_modules
-test
+dist/
+node_modules/
+test/
 Gruntfile.js
-.travis.yml
 .jscsrc
 .jshintrc
 .tern-project
+.github/
+coverage/
+RELEASE.rst

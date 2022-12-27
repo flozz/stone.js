@@ -1,17 +1,17 @@
-# Stone.js: Javascript i18n Library
+# Stone.js: JavaScript i18n Library
 
 [ ![Build Status](https://api.travis-ci.org/flozz/stone.js.svg?branch=master) ](https://travis-ci.org/flozz/stone.js)
 [ ![NPM Version](http://img.shields.io/npm/v/stonejs.svg?style=flat) ](https://www.npmjs.com/package/stonejs)
 [ ![License](http://img.shields.io/npm/l/stonejs.svg?style=flat) ](https://www.npmjs.com/package/stonejs)
 
 
-Stone.js is a client-side gettext-like Javascript internationalization library that provides many useful functionalities like:
+Stone.js is a client-side gettext-like JavaScript internationalization library that provides many useful functionalities like:
 
 * immediate translation (gettext)
 
 * differed translation using lazy strings (lazyGettext)
 
-* Javascript **and** HTML internationalization
+* JavaScript **and** HTML internationalization
 
 * replacement support inside translated strings
 
@@ -60,9 +60,9 @@ import Stone, { gettext as _ } from "stonejs";
 
 ### Internationalize Your Application
 
-#### Internationalize Javascript
+#### Internationalize JavaScript
 
-To internationalize your Javascript files, you just have to "mark" all translatable strings of your application by passing them to the `gettext` function.
+To internationalize your JavaScript files, you just have to "mark" all translatable strings of your application by passing them to the `gettext` function.
 
 **Example:**
 

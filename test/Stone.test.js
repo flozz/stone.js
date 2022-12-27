@@ -1,32 +1,44 @@
+var stonejs = require("stonejs");
+var CATALOGS = require("./data.json");
+var testHelpers = require("./helpers.js");
+
 describe("Stone.js main", function () {
 
     beforeAll(function () {
-        StoneTest.index.addCatalogs(CATALOGS);
+        stonejs.addCatalogs(CATALOGS);
     });
 
     it("sends an event when locale is changed", function (done) {
         function _onStonejsLocaleChanged(event) {
-            expect(StoneTest.index.getLocale()).toEqual("testlang");
+            expect(stonejs.getLocale()).toEqual("testlang");
             document.removeEventListener("stonejs-locale-changed", _onStonejsLocaleChanged, true);
             done();
         }
 
         document.addEventListener("stonejs-locale-changed", _onStonejsLocaleChanged, true);
-        StoneTest.index.setLocale("testlang");
+        stonejs.setLocale("testlang");
     });
 
     it("can loads catalogs automatically", function (done) {
-        _sendEvent("stonejs-autoload-catalogs", {catalog: {foolang: {messages: {"Hello World": ["Foo bar"]}}}});
+        testHelpers.sendEvent("stonejs-autoload-catalogs", {
+            catalog: {
+                foolang: {
+                    messages: {
+                        "Hello World": ["Foo bar"],
+                    },
+                },
+            },
+        });
 
         function _onStonejsLocaleChanged(event) {
-            expect(StoneTest.index.getLocale()).toEqual("foolang");
-            expect(StoneTest.index.gettext("Hello World")).toEqual("Foo bar");
+            expect(stonejs.getLocale()).toEqual("foolang");
+            expect(stonejs.gettext("Hello World")).toEqual("Foo bar");
             document.removeEventListener("stonejs-locale-changed", _onStonejsLocaleChanged, true);
             done();
         }
 
         document.addEventListener("stonejs-locale-changed", _onStonejsLocaleChanged, true);
-        StoneTest.index.setLocale("foolang");
+        stonejs.setLocale("foolang");
     });
 
 });

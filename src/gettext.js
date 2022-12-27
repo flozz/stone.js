@@ -42,9 +42,14 @@ function gettext(string, replacements, locale_parameter) {
     }
     var locale = locale_parameter || locale_default;
 
-    if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string] &&
-        catalogs[locale].messages[string].length > 0 && catalogs[locale].messages[string][0] !== "") {
-        result = catalogs[locale].messages[string][0];
+    if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string]) {
+        var messages = catalogs[locale].messages[string];
+        if (Array.isArray(messages) && messages.length > 0 && messages[0] !== "") {
+            result = messages[0];
+        }
+        else if (Array.isArray(messages["*"]) && messages["*"].length > 0 && messages["*"][0] !== "") {
+            result = messages["*"][0];
+        }
     }
 
     if (replacements) {
@@ -83,13 +88,84 @@ function ngettext(string, stringPlural, number, replacements, locale_parameter) 
         pluralForms = catalogs[locale]["plural-forms"];
         messages = catalogs[locale].messages[string];
     }
-    if (pluralForms && messages && messages.length > 0) {
+    if (pluralForms !== undefined && messages !== undefined) {
         if (!pluralFormsFunctions[locale]) {
             pluralFormsFunctions[locale] = helpers.generatePluralFormsFunction(pluralForms);
         }
+
         var pluralIndex = pluralFormsFunctions[locale](number);
-        if (messages[pluralIndex] && messages[pluralIndex] !== "") {
-            result = messages[pluralIndex];
+        var message;
+        if (Array.isArray(messages) && messages.length > 0) {
+            message = messages;
+        }
+        else if (Array.isArray(messages["*"]) && messages["*"].length > 0) {
+            message = messages["*"];
+        }
+        if (message[pluralIndex] !== undefined && message[pluralIndex] !== "") {
+            result = message[pluralIndex];
+        }
+    }
+
+    if (!replacements) {
+        replacements = {};
+    }
+    if (replacements.n === undefined) {
+        replacements.n = number;
+    }
+    for (var r in replacements) {
+        result = result.replace(new RegExp("\{" + r + "\}", "g"), replacements[r]);
+    }
+
+    return result;
+}
+
+function pgettext(context, string, replacements, locale_parameter) {
+    var result = string;
+    if (typeof replacements == "string") {
+        locale_parameter = replacements;
+        replacements = undefined;
+    }
+    var locale = locale_parameter || locale_default;
+
+    if (locale && catalogs[locale] && catalogs[locale].messages && catalogs[locale].messages[string]) {
+        var messages = catalogs[locale].messages[string];
+        if (Array.isArray(messages[context]) && messages[context].length > 0 && messages[context][0] !== "") {
+            result = messages[context][0];
+        }
+    }
+
+    if (replacements) {
+        for (var r in replacements) {
+            result = result.replace(new RegExp("\{" + r + "\}", "g"), replacements[r]);
+        }
+    }
+
+    return result;
+}
+
+function npgettext(context, string, stringPlural, number, replacements, locale_parameter) {
+    var result = number === 1 ? string : stringPlural;
+    if (typeof replacements == "string") {
+        locale_parameter = replacements;
+        replacements = undefined;
+    }
+    var locale = locale_parameter || locale_default;
+
+    var messages;
+    var pluralForms;
+    if (locale && catalogs[locale] && catalogs[locale].messages) {
+        pluralForms = catalogs[locale]["plural-forms"];
+        messages = catalogs[locale].messages[string];
+    }
+    if (pluralForms && messages) {
+        if (!pluralFormsFunctions[locale]) {
+            pluralFormsFunctions[locale] = helpers.generatePluralFormsFunction(pluralForms);
+        }
+        if (Array.isArray(messages[context]) && messages[context].length > 0) {
+            var pluralIndex = pluralFormsFunctions[locale](number);
+            if (messages[context][pluralIndex] && messages[context][pluralIndex] !== "") {
+                result = messages[context][pluralIndex];
+            }
         }
     }
 
@@ -146,6 +222,24 @@ function LazyNString(string, stringPlural, number, replacements, locale) {
 
 function lazyNgettext(string, stringPlural, number, replacements, locale) {
     return new LazyNString(string, stringPlural, number, replacements, locale);
+}
+
+function LazyPString(context, string, replacements, locale) {
+    this.toString = pgettext.bind(this, context, string, replacements, locale);
+    _copyStringPrototype(this);
+}
+
+function lazyPgettext(context, string, replacements, locale) {
+    return new LazyPString(context, string, replacements, locale);
+}
+
+function LazyNPString(context, string, stringPlural, number, replacements, locale) {
+    this.toString = npgettext.bind(this, context, string, stringPlural, number, replacements, locale);
+    _copyStringPrototype(this);
+}
+
+function lazyNpgettext(context, string, stringPlural, number, replacements, locale) {
+    return new LazyNPString(context, string, stringPlural, number, replacements, locale);
 }
 
 /**
@@ -213,9 +307,15 @@ module.exports = {
     LazyString: LazyString,
     gettext: gettext,
     lazyGettext: lazyGettext,
+    LazyNString: LazyNString,
     ngettext: ngettext,
     lazyNgettext: lazyNgettext,
-    LazyNString: LazyNString,
+    LazyPString: LazyPString,
+    pgettext: pgettext,
+    lazyPgettext: lazyPgettext,
+    LazyNPString: LazyNPString,
+    npgettext: npgettext,
+    lazyNpgettext: lazyNpgettext,
     gettext_noop: gettext_noop,
     clearCatalogs: clearCatalogs,
     addCatalogs: addCatalogs,

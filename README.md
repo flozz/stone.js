@@ -250,9 +250,77 @@ var text2 = Stone.ngettext("{n} apple", "{n} apples", 3, {n: 3});
 var text3 = Stone.ngettext("{n} apple", "{n} apples", 3); // 'n' is an implicit replacement of given number
 ```
 
+
 ### Stone.lazyNgettext
 
 Same as `Stone.ngettext` but returns a `Stone.LazyNString` instead of a `String`.
+
+
+### Stone.pgettext
+
+Translates the given string to the current language using a context argument to solve ambiguities ([read more](https://www.gnu.org/software/gettext/manual/gettext.html#Using-contexts-for-solving-ambiguities)).
+
+    String: Stone.pgettext( <context>, <string> [, locale] );
+    String: Stone.pgettext( <context>, <string> [, replacements] [, locale] );
+
+**params:**
+
+* `context`: The context of the string.
+* `string`: The string to translate.
+* `locale`: The locale string to use for translation (optional, default: current locale).
+* `replacements`: an object containing replacements for the string (optional).
+
+**returns:**
+
+The translated string.
+
+**Examples:**
+
+```javascript
+var text1 = Stone.pgettext("going back", "Back");
+var text1 = Stone.pgettext("back of an object", "Back", "it");
+```
+
+### Stone.lazyPgettext
+
+Same as `Stone.pgettext` but returns a `Stone.LazyPString` instead of a `String`.
+
+
+### Stone.npgettext
+
+Translates the given strings to the current language with plural support and using a context argument to solve ambiguities ([read more](https://www.gnu.org/software/gettext/manual/gettext.html#Using-contexts-for-solving-ambiguities)).
+
+    String: Stone.npgettext( <context>, <string>, <stringPlural>, <number> [, locale] );
+    String: Stone.npgettext( <context>, <string>, <stringPlural>, <number> [, replacements] [, locale] );
+
+**params:**
+
+* `context`: The context of the string.
+* `string`: The string to translate, in English singular form.
+* `stringPlural`: The string to translate, in English plural form.
+* `number`: The number that determines plural forms
+* `locale`: The locale string to use for translation (optional, default: current locale).
+* `replacements`: an object containing replacements for the string (optional, see example below).
+
+Note: 'n' is an implicit replacement for given number.
+
+**returns:**
+
+The translated string, in some plural form.
+
+**Examples:**
+
+```javascript
+var text1 = Stone.npgettext("fruit", "one apple", "{nbApples} apples", 3, {nbApples: 3});
+var text2 = Stone.npgettext("fruit", "{n} apple", "{n} apples", 3, {n: 3});
+var text3 = Stone.npgettext("fruit", "{n} apple", "{n} apples", 3); // 'n' is an implicit replacement of given number
+```
+
+
+### Stone.lazyNpgettext
+
+Same as `Stone.npgettext` but returns a `Stone.LazyNPString` instead of a `String`.
+
 
 ### Stone.addCatalogs
 
@@ -269,6 +337,7 @@ Adds one (or more if you merged multiple languages into one file) string catalog
 ```javascript
 Stone.addCatalogs(catalogs);
 ```
+
 
 ### Stone.gettext_noop
 
@@ -297,6 +366,7 @@ var text1 = Stone.gettext(translatable1);
 var text2 = Stone.gettext(translatable2, { name: "John" });
 ```
 
+
 ### Stone.getLocale
 
 Returns the current locale (aka target language for the `gettext` and `lazyGettext` functions). The default locale is "c" (it means no translation: simply returns the string as it is in the source).
@@ -309,6 +379,7 @@ Returns the current locale (aka target language for the `gettext` and `lazyGette
 var locale = Stone.getLocale();
 // "c", "en", "fr", ...
 ```
+
 
 ### Stone.listCatalogs
 
@@ -342,6 +413,7 @@ Defines the current locale (aka the target language for the `gettext` and `lazyG
 Stone.setLocale("fr");
 ```
 
+
 ### Stone.setBestMatchingLocale
 
 Find and set the best language for the user (depending on available catalogs and given language list).
@@ -360,6 +432,7 @@ setBestMatchingLocale("fr");    // Finds the catalog that best match "fr" ("fr",
 setBestMatchingLocale(["fr", "en_US", "en_UK"]);    // Finds the best available catalog from the given list
 ```
 
+
 ### Stone.findBestMatchingLocale
 
 Find and return the given locale that best matches the given catalogs.
@@ -376,6 +449,7 @@ Find and return the given locale that best matches the given catalogs.
 ```javascript
 Stone.findBestMatchingLocale(["fr"], ["pt_BR", "fr_CA", "fr_FR"]);  // -> "fr_FR"
 ```
+
 
 ### Stone.guessUserLanguage
 
@@ -428,9 +502,21 @@ You can find an example of its use in the PhotonUI documentation:
 
 * http://wanadev.github.io/PhotonUI/doc/widgets/translation.html
 
+
 ### Stone.LazyNString (class)
 
 Same as `Stone.LazyString`, using `Stone.ngettext` for plural support.
+
+
+### Stone.LazyPString (class)
+
+Same as `Stone.LazyString`, using `Stone.pgettext` for context support.
+
+
+### Stone.LazyNPString (class)
+
+Same as `Stone.LazyString`, using `Stone.npgettext` for plural and context support.
+
 
 ### "stonejs-locale-changed" (event)
 
@@ -444,15 +530,23 @@ This event is fired each time the locale changes (using the `Stone.setLocale` fu
     "fr": {
         "plural-forms": "nplurals=2; plural=(n > 1);",
         "messages": {
-            "Hello World": ["Bonjour le monde"],
-            "Hello {name}": ["Bonjour {name}"]
+            "Hello World": {
+                "*": ["Bonjour le monde"]
+            },
+            "Hello {name}": {
+                "*": ["Bonjour {name}"]
+            }
         }
     },
     "it": {
         "plural-forms": "nplurals=2; plural=(n != 1);",
         "messages": {
-            "Hello World": ["Buongiorno il mondo"],
-            "Hello {name}": ["Buongiorno {name}"]
+            "Hello World": {
+                "*": ["Buongiorno il mondo"]
+            },
+            "Hello {name}": {
+                "*": ["Buongiorno {name}"]
+            }
         }
     }
 }

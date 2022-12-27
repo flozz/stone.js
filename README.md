@@ -459,6 +459,16 @@ This event is fired each time the locale changes (using the `Stone.setLocale` fu
 ```
 
 
+## Support this project
+
+Want to support this project?
+
+* [☕️ Buy me a coffee](https://www.buymeacoffee.com/flozz>)
+* [💵️ Give me a tip on PayPal](https://www.paypal.me/0xflozz>)
+* [❤️ Sponsor me on GitHub](https://github.com/sponsors/flozz>)
+
+
+
 ## Changelog
 
 * **[NEXT]** (changes on `master` but not released yet):
